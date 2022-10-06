@@ -9,7 +9,7 @@ Bilal Nasir,
 Rohit Chandran
 
 ## Tools
-React Native, Android Studio, iOS simulator
+React Native, Android Studio, iOS simulator, Expo Cli
 
 ## Schedule for Daily Meetings
 Monday - Friday 4:00-4:15pm Daily Stand Up Sprint Meetings
