@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Pocket Planner Expo Default Starting App</Text>
+      <Text>Testing Git.</Text>
       <StatusBar style="auto" />
     </View>
   );
