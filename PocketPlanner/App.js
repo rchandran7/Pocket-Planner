@@ -1,9 +1,13 @@
+
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, Image, View } from 'react-native';
 import SignInScreen from './src/Screens/SignInScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import * as React from 'react';
+import ScreenNavigator from './Navigator'
 
-export default function App() {
+function App() {
   return (
     <View>
       <SignInScreen />
@@ -12,11 +16,4 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
