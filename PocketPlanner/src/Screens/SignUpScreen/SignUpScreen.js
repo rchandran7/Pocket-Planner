@@ -4,6 +4,7 @@ import CustomButton from '../../Component/CustomButton/CustomButton';
 import {useState} from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import SocialSignInButtons from '../../Component/SocialSignInButtons/SocialSignInButtons';
+
 const SignUpScreen = () => {
     const [username,setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -21,19 +22,6 @@ const onTermsOfUsePressed = () => {
 const onPrivacyPressed = () => {
     console.warn("Privacy Policy Pressed");
 }
-
-const onSignInFacebook = () => {
-    console.warn("Facebook Log in Occured");
-}
-
-const onSignInGoogle = () => {
-    console.warn("Google Log in Occured");
-}
-
-const onSignInApple = () => {
-    console.warn("Apple Log in Occured");
-}
-
 
 return (
     <ScrollView showsVerticalScrollIndicator = {false}>
@@ -76,24 +64,8 @@ return (
             <Text styles = {styles.link} onPress = {onPrivacyPressed}>Privacy Policy</Text>
         </Text>
 
-        <CustomButton 
-            text = "Sign In With Facebook" 
-            onPress ={onSignInFacebook}
-            bgColor = "#E7EAF4"
-            fgColor = "#4765A9"
-        />
-        <CustomButton 
-            text = "Sign In With Google" 
-            onPress ={onSignInGoogle}
-            bgColor = "#FAE9EA"
-            fgColor = "#DD4D44"
-        />
-        <CustomButton 
-            text = "Sign In With Apple" 
-            onPress ={onSignInApple}
-            bgColor = "#e3e3e3"
-            fgColor = "#363636"
-        />
+        <SocialSignInButtons/>
+
         <CustomButton 
             text = "Don't have an account? Create One" 
             onPress ={onSignUpPressed}

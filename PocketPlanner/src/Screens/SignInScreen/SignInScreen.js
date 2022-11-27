@@ -5,7 +5,7 @@ import CustomButton from '../../Component/CustomButton/CustomButton';
 import {useState} from 'react';
 import { useWindowDimensions } from 'react-native';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
-import SocialSignInButtons from '../../Component/SocialSignInButtons';
+import SocialSignInButtons from '../../Component/SocialSignInButtons/SocialSignInButtons';
 
 const SignInScreen = () => {
     const [username,setUsername] = useState('');
