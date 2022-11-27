@@ -39,7 +39,6 @@ return (
         <CustomButton 
             text = "Log In" 
             onPress ={onSignInPressed}
-            type = "PRIMARY"
         />
 
         <CustomButton 
