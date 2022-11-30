@@ -1,5 +1,5 @@
- import React from 'react'
- import CustomButton from '../CustomButton/CustomButton' 
+ import React from 'react';
+ import CustomButton from '../CustomButton/CustomButton' ;
 
  const SocialSignInButtons = () => {
     const onSignInFacebook = () => {
@@ -36,4 +36,6 @@
         </>
     
     )
- }
+ };
+
+ export default SocialSignInButtons

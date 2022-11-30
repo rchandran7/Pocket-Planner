@@ -29,4 +29,4 @@ const styles = StyleSheet.create({
     },
     input: {},
 });
-export default CustomInput
+export default CustomInput;
