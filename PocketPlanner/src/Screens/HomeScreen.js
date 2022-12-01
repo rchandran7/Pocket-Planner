@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, StatusBar, FlatList} from 'react-native';
 import styled from 'styled-components';
-import AddInput from '../src/Component/ScheduleList/AddInput';
-import TodoList from '../src/Component/ScheduleList/TodoList';
-import Header from '../src/Component/ScheduleList/Header';
-import Empty from '../src/Component/ScheduleList/Empty';
+import AddInput from '../Component/ScheduleList/AddInput';
+import TodoList from '../Component/ScheduleList/TodoList';
+import Header from '../Component/ScheduleList/Header';
+import Empty from '../Component/ScheduleList/Empty';
 
 export default function HomeScreen() {
   const [data, setData] = useState([]);

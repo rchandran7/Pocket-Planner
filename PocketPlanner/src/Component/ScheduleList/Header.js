@@ -1,7 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-let today = new Date().toISOString().slice(0, 10);
+var day = new Date().getDate();
+var month = new Date().getMonth() + 1;
+var year = new Date().getFullYear();
+let today = month + '-' + day + '-' + year;
 
 export default function Header() {
   return (
