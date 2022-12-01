@@ -1,22 +1,59 @@
-import * as React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, StatusBar, FlatList} from 'react-native';
+import styled from 'styled-components';
+import AddInput from '../src/Component/ScheduleList/AddInput';
+import TodoList from '../src/Component/ScheduleList/TodoList';
+import Header from '../src/Component/ScheduleList/Header';
+import Empty from '../src/Component/ScheduleList/Empty';
 
 export default function HomeScreen() {
+  const [data, setData] = useState([]);
+  const submitHandler = (value) => {
+    setData((prevTodo) => {
+      return [
+        {
+          value: value,
+          key: Math.random().toString(),
+        },
+        ...prevTodo,
+      ];
+    });
+  };
+  const deleteItem = (key) => {
+    setData((prevTodo) => {
+      return prevTodo.filter((todo) => todo.key != key);
+    });
+  };
     return (
-    <View style = {styles.container}>
+      <ComponentContainer>
+        <View>
+          <StatusBar barStyle="light-content" 
+            backgroundColor="#B0C4DE" />
+        </View>
 
-        <Text>Todays Events</Text> 
-
-    </View>
+        <View>
+          <FlatList
+            data = {data}
+            ListHeaderComponent = {() => <Header />}
+            ListEmptyComponent = {() => <Empty />}
+            keyExtractor = {(item) => item.key}
+            renderItem = {({item}) => (
+              <TodoList item = {item} deleteItem = {deleteItem} />
+            )}
+          />
+          <View>
+            <AddInput submitHandler={submitHandler} />
+          </View>
+        </View>
+      </ComponentContainer>
     );
-  }
+}
 
-
-  const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-  })
+  
+const ComponentContainer = styled.View`
+  background-color: #B0C4DE;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
