@@ -1,18 +1,17 @@
-
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import * as React from 'react';
 import { StyleSheet, Text, Image, View } from 'react-native';
 import SignInScreen from './src/Screens/SignInScreen';
 import { NavigationContainer } from '@react-navigation/native';
-import ScreenNavigator from './Navigator'
+
+import ScreenNavigator from './src/Screens/Navigator'
+import DefaultStack from './src/Routes/defaultStack'
 
 function App() {
   return (
-    <View>
-      <SignInScreen />
-      <StatusBar style="auto" />
-    </View>
+    <DefaultStack />
+    //<ScreenNavigator />
   );
 }
 
-export default App;
+export default App; 
