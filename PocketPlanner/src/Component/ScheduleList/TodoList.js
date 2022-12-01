@@ -11,19 +11,23 @@ export default function TodoList({item, deleteItem}) {
   }
     return (
         <ComponentContainer>
-        <ListContainer>
-          <CircleContainer onPress={() => changeIcon()}>
-            <Entypo name="circle" size={20} color="#B0C4DE" />
-          </CircleContainer>
-          <View>
-            <TextItem>{item.value}</TextItem>
-            <TextDate>Task</TextDate>
-          </View>
-          <IconContainer onPress={() => deleteItem(item.key)}>
-            <MaterialIcons name="delete" size={24} color="#B0C4DE" />
-          </IconContainer>
-        </ListContainer>
-      </ComponentContainer>
+          <ListContainer>
+            
+            <CircleContainer onPress={() => changeIcon()}>
+              <Entypo name="circle" size={20} color="#B0C4DE" />
+            </CircleContainer>
+
+            <View>
+              <TextItem>{item.value}</TextItem>
+              <TextDate>Task</TextDate>
+            </View>
+
+            <IconContainer onPress={() => deleteItem(item.key)}>
+              <MaterialIcons name="delete" size={24} color="#B0C4DE" />
+            </IconContainer>
+
+          </ListContainer>
+        </ComponentContainer>
     );
 }
 

@@ -8,6 +8,7 @@ import Empty from '../Component/ScheduleList/Empty';
 
 export default function HomeScreen() {
   const [data, setData] = useState([]);
+
   const submitHandler = (value) => {
     setData((prevTodo) => {
       return [
@@ -19,13 +20,16 @@ export default function HomeScreen() {
       ];
     });
   };
+
   const deleteItem = (key) => {
     setData((prevTodo) => {
       return prevTodo.filter((todo) => todo.key != key);
     });
   };
+
     return (
       <ComponentContainer>
+
         <View>
           <StatusBar barStyle="light-content" 
             backgroundColor="#B0C4DE" />
@@ -41,10 +45,12 @@ export default function HomeScreen() {
               <TodoList item = {item} deleteItem = {deleteItem} />
             )}
           />
+
           <View>
             <AddInput submitHandler={submitHandler} />
           </View>
         </View>
+        
       </ComponentContainer>
     );
 }
