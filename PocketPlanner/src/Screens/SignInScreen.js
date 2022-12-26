@@ -1,8 +1,8 @@
 import React from 'react';
 import logo from '../../../assets/Logo_PocketPlanner.jpg';
-import CustomInput from '../../Component/CustomInput/CustomInput';
-import CustomButton from '../../Component/CustomButton/CustomButton';
-import SocialSignInButtons from '../../Component/SocialSignInButtons/SocialSignInButtons';
+import CustomInput from '../Component/CustomInput/CustomInput';
+import CustomButton from '../Component/CustomButton/CustomButton';
+import SocialSignInButtons from '../Component/SocialSignInButtons/SocialSignInButtons';
 import {useState} from 'react';
 import { useWindowDimensions } from 'react-native';
 import { View, Image, StyleSheet, ScrollView } from 'react-native';
