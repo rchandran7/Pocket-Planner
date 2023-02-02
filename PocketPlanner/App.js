@@ -16,7 +16,7 @@ Amplify.configure(config);
 function App() {
   return (
     // <DefaultStack />
-    <DefaultStack />
+    <SignUpScreen />
   );
 };
 
