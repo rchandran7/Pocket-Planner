@@ -1,0 +1,56 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-pocketplanner-staging-220118-authRole",
+      "UnauthRoleArn": "arn:aws:iam::534870955440:role/amplify-pocketplanner-staging-220118-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::534870955440:role/amplify-pocketplanner-staging-220118-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-pocketplanner-staging-220118-deployment",
+      "UnauthRoleName": "amplify-pocketplanner-staging-220118-unauthRole",
+      "StackName": "amplify-pocketplanner-staging-220118",
+      "StackId": "arn:aws:cloudformation:us-east-1:534870955440:stack/amplify-pocketplanner-staging-220118/f627fcc0-9dc4-11ed-a1e9-0ef67d44b091",
+      "AmplifyAppId": "dvd586m28n89a"
+    }
+  },
+  "auth": {
+    "PocketPlanner": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 7,
+          "passwordPolicyCharacters": []
+        },
+        "signupAttributes": [
+          "EMAIL",
+          "PREFERRED_USERNAME"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "output": {
+        "UserPoolId": "us-east-1_ryT0phsTM",
+        "AppClientIDWeb": "91992qn8cff4oae46um75b8um",
+        "AppClientID": "6hfjt0rokuljml7qo54ndlo1a4",
+        "IdentityPoolId": "us-east-1:b4c1994b-903c-4b3e-a1a5-d1a1be64eee5",
+        "UserPoolArn": "arn:aws:cognito-idp:us-east-1:534870955440:userpool/us-east-1_ryT0phsTM",
+        "IdentityPoolName": "testAuthIdentityPool__staging",
+        "UserPoolName": "PocketPlanner"
+      },
+      "lastPushTimeStamp": "2023-01-26T22:19:12.942Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-pocketplanner-staging-220118-deployment/amplify-cfn-templates/auth/PocketPlanner-cloudformation-template.json",
+        "logicalId": "authPocketPlanner"
+      }
+    }
+  }
+}
