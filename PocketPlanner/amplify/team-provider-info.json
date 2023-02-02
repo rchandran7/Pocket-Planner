@@ -1,0 +1,20 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-pocketplanner-staging-191737-authRole",
+      "UnauthRoleArn": "arn:aws:iam::551436859354:role/amplify-pocketplanner-staging-191737-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::551436859354:role/amplify-pocketplanner-staging-191737-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-pocketplanner-staging-191737-deployment",
+      "UnauthRoleName": "amplify-pocketplanner-staging-191737-unauthRole",
+      "StackName": "amplify-pocketplanner-staging-191737",
+      "StackId": "arn:aws:cloudformation:us-east-2:551436859354:stack/amplify-pocketplanner-staging-191737/c1f61660-a0d2-11ed-abd5-0a3642c12c44",
+      "AmplifyAppId": "d3pge5lvt8oyzf"
+    },
+    "categories": {
+      "auth": {
+        "PocketPlanner": {}
+      }
+    }
+  }
+}

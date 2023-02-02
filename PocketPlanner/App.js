@@ -7,15 +7,17 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import ScreenNavigator from './src/Screens/Navigator'
 import DefaultStack from './src/Routes/defaultStack'
+import { Amplify } from 'aws-amplify';
+import {withAuthenticator} from 'aws-amplify-react-native';
+import config from './src/aws-exports';
 
+
+Amplify.configure(config);
 function App() {
   return (
     // <DefaultStack />
-    <View>
-      <SignUpScreen />
-      <StatusBar style="auto" />
-    </View>
+    <DefaultStack />
   );
 };
 
-export default App; 
+export default withAuthenticator(App); 
