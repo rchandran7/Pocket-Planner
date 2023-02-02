@@ -28,7 +28,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
-import HomeScreen from './HomeScreen';
 import SettingsScreen from './SettingsScreen';
 import FriendScreen from './FriendScreen';
 
@@ -41,17 +40,8 @@ function ScreenNavigator() {
           headerShown: false
         }}
       >
-        <Tab.Screen 
-          name="Home" 
-          component={HomeScreen}
-          options={{
-            tabBarLabel: 'Home',
-            tabBarIcon: ({ color }) => (
-              <MaterialCommunityIcons name = "home" color={color} size={25} />
-            )
-          }}
-        />
 
+        
         <Tab.Screen 
           name="Friends" 
           component={FriendScreen} 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { createStackNavigator } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import ScreenNavigator from '../Screens/Navigator';
 import AddTask from '../Screens/TaskAdder';
 import { NavigationContainer } from '@react-navigation/native';
