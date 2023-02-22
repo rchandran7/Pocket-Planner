@@ -1,52 +1,30 @@
 import React, { useState } from 'react';
-import { Text,TextInput, StyleSheet, TouchableOpacity} from 'react-native';
+import { TouchableOpacity, View} from 'react-native';
 import styled from 'styled-components';
+import CustomButton from '../CustomButton/CustomButton';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 
 export default function AddInput({submitHandler}) {
-  const [value, setValue] = useState("");
-  const onChangeText = (text) => {
-    setValue(text);
-  };
+  const navigation = useNavigation();
   return (
-    <ComponentContainer>
-        <InputContainer>
-          <TextInput placeholder = "Add Task..." onChangeText = {onChangeText} />
-        </InputContainer>
-        <SubmitButton
-          onPress={() => {
-            setValue(submitHandler(value));
-          }}
-        >
-          <Text>Submit</Text>
-        </SubmitButton>
-    </ComponentContainer>
+    <PlusButton onPress={()=>navigation.navigate("AddTask")}>
+     <ButtonContainer>
+         <AntDesign name = "pluscircle" size = {50}/>
+     </ButtonContainer>
+    </PlusButton>
   );
 }
 
-const ComponentContainer = styled.View`
-  flex-direction: row;
-`;
-
-const InputContainer = styled.View`
-  flex-direction: row;
-  border-radius: 10px;
-`;
-
-const Input = styled.TextInput`
-  font-size: 20px;
-  background-color: white;
-  width: 300px;
-  margin-right: 20px;
-  padding: 10px;
-  margin-bottom: 20px;
-  border-radius: 10px;
-`;
-
-const SubmitButton = styled.TouchableOpacity`
-  width: 50px;
-  justify-content: center;
+const PlusButton = styled.TouchableOpacity`
   align-items: center;
-  background-color: #F8F8FF;
-  margin-bottom: 20px;
-  border-radius: 50px;
+  justify-content: center;
+`;
+
+const ButtonContainer = styled.View`
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 40px;
 `;
