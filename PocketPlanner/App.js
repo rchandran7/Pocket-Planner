@@ -10,6 +10,7 @@ import {createUser} from './src/graphql/mutations';
 Amplify.configure(config);
 
 function App() {
+
   useEffect(() => {
     const syncUser = async () => {
       // get Auth user
