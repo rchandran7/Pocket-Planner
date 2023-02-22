@@ -15,8 +15,7 @@ import config from './src/aws-exports';
 Amplify.configure(config);
 function App() {
   return (
-    // <DefaultStack />
-    <SignUpScreen />
+    <DefaultStack />
   );
 };
 
