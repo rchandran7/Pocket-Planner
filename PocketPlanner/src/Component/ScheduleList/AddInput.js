@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity, View, Modal, Alert, Pressable} from 'react-native';
+import { StyleSheet, View, Modal, Alert} from 'react-native';
 import styled from 'styled-components';
-import CustomButton from '../CustomButton/CustomButton';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { useNavigation } from '@react-navigation/native';
-import { useCallback } from 'react/cjs/react.production.min';
 
 export default function AddInput({submitHandler}) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -14,15 +9,6 @@ export default function AddInput({submitHandler}) {
   const [addClassModalVisible, setAddClassModalVisible] = useState(false);
   const [assignmentModalVisible, setAssignmentModalVisible] = useState(false);
   const [meetingModalVisible, setMeetingModalVisible] = useState(false);
-  // const onOpenClassModal = useCallback(() => {
-  //   setModalVisible(false);
-  //   setTimeout(
-  //     () => {
-  //       setClassModalVisible(true);
-  //     },
-  //     100,
-  //   );
-  // }, []);
   return (
     <View style={styles.centeredView}>
       <Modal
