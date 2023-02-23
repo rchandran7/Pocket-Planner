@@ -57,7 +57,7 @@ export default function HomeScreen() {
 
   
 const ComponentContainer = styled.View`
-  background-color: #B0C4DE;
+  background-color: white;
   height: 100%;
   flex-direction: column;
   align-items: center;

@@ -15,6 +15,7 @@ export default function Empty() {
 const ComponentContainer = styled.View`
   align-items: center;
   justify-content: center;
+  margin-left: 20px;
   height: 570px;
 `;
 
