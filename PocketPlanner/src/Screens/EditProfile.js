@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { API, graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation, Storage } from 'aws-amplify';
 import { updateUser } from '../graphql/mutations';
 
 import * as ImagePicker from 'expo-image-picker';
@@ -11,7 +11,7 @@ export default function EditProfileScreen({ navigation, route }) {
 
   const [name, setName] = useState(user.name);
   const [bio, setBio] = useState(user.bio);
-  const [imageUri, setImageUri] = useState(user.imageUri);
+  const [useImage, setImage] = useState(user.image);
 
   useEffect(() => {
     navigation.setOptions({ headerTitle: 'Edit Profile' });
@@ -27,12 +27,32 @@ export default function EditProfileScreen({ navigation, route }) {
       });
       console.log(result);
       if (!result.canceled) {
-        setImageUri(result.uri);
+        const { uri } = result.uri;
+        const filename = uri.split('/').pop();
+        const response = await fetch(uri);
+        const blob = await response.blob();
+  
+        // Upload the image to S3
+        const user = await Auth.currentAuthenticatedUser();
+        const extension = filename.split('.').pop();
+        const key = `${user.attributes.sub}-profile-image.${extension}`;
+        const s3Response = await Storage.put(key, blob, {
+          contentType: 'image/jpeg' // adjust the content type as needed
+        });
+  
+        // Update the image state with the S3 object
+        setImage({
+          bucket: s3Response.bucket,
+          region: s3Response.region,
+          key: s3Response.key,
+          localUri: uri
+        });
       }
     } catch (e) {
       console.log('Error selecting image', e);
     }
   };
+  
 
   const handleSaveProfile = async () => {
     try {
@@ -42,7 +62,7 @@ export default function EditProfileScreen({ navigation, route }) {
             id: user.id,
             name: name,
             bio: bio,
-            imageUri: imageUri
+            image: useImage
           }
         })
       );
@@ -56,14 +76,15 @@ export default function EditProfileScreen({ navigation, route }) {
   return (
     <View style={styles.container}>
         <TouchableOpacity onPress={handleSelectImage} style={styles.profilePictureContainer}>
-        {imageUri ? (
-        <Image source={{ uri: imageUri }} style={styles.profilePicture} />
+        {image?.localUri ? (
+          <Image source={{ uri: image.localUri }} style={styles.profilePicture} />
         ) : (
-            <View style={styles.addProfilePictureContainer}>
-                <Text style={styles.addProfilePictureText}>Add Profile Picture</Text>
-            </View>
+          <View style={styles.addProfilePictureContainer}>
+            <Text style={styles.addProfilePictureText}>Add Profile Picture</Text>
+          </View>
         )}
         </TouchableOpacity>
+
 
       <Text style={styles.label}>Username</Text>
       <TextInput
