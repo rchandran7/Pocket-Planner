@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Keyboard } from 'react-native'
 import { TextInput } from 'react-native'
-import Entypo from 'react-native-vector-icons/Entypo';
-
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Task() {
 
@@ -18,7 +18,7 @@ export default function Task() {
         setDesc(null);
         setPriority(null);
     }
-
+    const navigation = useNavigation();
     return (
         <View style={styles.body}>
 
@@ -44,7 +44,7 @@ export default function Task() {
             />
 
             <TouchableOpacity style={styles.button} onPress={handleAddTask}>
-                <Entypo name={'plus'} size={26} color={"#fff"} />
+                <AntDesign name={'checkcircle'} size={50} />
             </TouchableOpacity>
 
         </View>
@@ -70,14 +70,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
     },
     button: {
-        width: 200,
-        height: 40,
-        borderRadius: 50,
-        backgroundColor: '#000',
-        justifyContent: 'center',
         alignItems: 'center',
+        justifyContent: 'center',
         position: 'absolute',
-        bottom: 10,
+        bottom: 50,
         elevation: 5,
+        
     },
 })

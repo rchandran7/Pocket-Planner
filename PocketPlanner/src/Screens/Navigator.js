@@ -30,6 +30,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 import SettingsScreen from './SettingsScreen';
 import ProfileScreen from './ProfileScreen';
+import HomeScreen from './HomeScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -41,7 +42,16 @@ function ScreenNavigator() {
         }}
       >
 
-        
+        <Tab.Screen 
+          name="HomeScreen" 
+          component={HomeScreen} 
+          options={{
+            tabBarLabel: 'Schedule',
+            tabBarIcon: ({color}) => (
+              <MaterialIcons name = "schedule" color={color} size={22} />
+            )
+          }}
+        /> 
         <Tab.Screen 
           name="Profile" 
           component={ProfileScreen} 
