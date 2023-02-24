@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { listUsers } from '../graphql/queries';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { API, graphqlOperation, Auth } from 'aws-amplify';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
+import styled from "styled-components";
 
 export default function ProfileScreen({ navigation }) {
   const [user, setUser] = useState(null);
@@ -60,6 +61,11 @@ export default function ProfileScreen({ navigation }) {
           <Text style={styles.buttonText}>Sign Out</Text>
         </TouchableOpacity>
       </View>
+      <ComponentContainer>
+          <LogoImage
+            source={require("../../assets/Logo_PocketPlanner.jpg")}
+          />
+        </ComponentContainer>
     </SafeAreaView>
   );
 }
@@ -97,14 +103,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   editButton: {
-    backgroundColor: '#000',
+    backgroundColor: '#B0C4DE',
     borderRadius: 10,
     padding: 10,
     alignItems: 'center',
     width: '48%',
   },
   signOutButton: {
-    backgroundColor: '#ff0000',
+    backgroundColor: '#FF4500',
     borderRadius: 10,
     padding: 10,
     alignItems: 'center',
@@ -115,3 +121,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   }
 });
+const ComponentContainer = styled.View`
+  align-items: center;
+  justify-content: center;
+  height: 450px;
+`;
+const LogoImage = styled.Image`
+  width: 325px;
+  height: 325px;
+`;

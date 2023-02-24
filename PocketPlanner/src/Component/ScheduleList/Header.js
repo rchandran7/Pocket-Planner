@@ -25,11 +25,12 @@ const ComponentContainer = styled.View`
 const HeaderText = styled.Text`
   color: black;
   font-size: 30px;
-  margin-top: 20px
+  margin-top: 70px
 `;
 
 const HeaderList = styled.Text`
   color: #FF4500;
   font-size: 20px;
   margin-right: 7px;
+  margin-top: 10px;
 `;
