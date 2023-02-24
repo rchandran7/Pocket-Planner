@@ -31,7 +31,8 @@ function App() {
       const newUser = {
         id: authUser.attributes.sub,
         name: authUser.attributes.name,
-        bio: "Hey, I am using PocketPlanner",
+        imageUri: 'https://www.pngfind.com/pngs/m/676-6764065_default-profile-picture-transparent-hd-png-download.png',
+        bio: "Hey, I am using PocketPlanner"
       };
 
       await API.graphql(
