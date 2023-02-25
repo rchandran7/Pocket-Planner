@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { listUsers } from '../graphql/queries';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { API, graphqlOperation, Auth } from 'aws-amplify';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
@@ -26,6 +26,7 @@ export default function ProfileScreen({ navigation }) {
       fetchUsers();
       console.log(user);
     }, [])
+
   );
 
   const handleSignOut = async () => {
@@ -43,12 +44,10 @@ export default function ProfileScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfo}>
-      {user && user.image && (
         <Image
-          source={{ uri: `https://${user.image.bucket}.s3.${user.image.region}.amazonaws.com/public/default-avatar.jpg` }}
+          source={{ uri: `https://${user.image.bucket}.s3.${user.image.region}.amazonaws.com/public/${user.image.key}` }}
           style={ styles.userImg }
         />
-        )}
         <Text style={styles.name}>{user.name}</Text>
         <Text style={styles.bio}>{user.bio}</Text>
       </View>

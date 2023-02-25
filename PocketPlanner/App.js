@@ -28,7 +28,7 @@ function App() {
         console.log(userData)
         return;
       }
-      const defaultImage = 'https://www.pngfind.com/pngs/m/676-6764065_default-profile-picture-transparent-hd-png-download.png';
+      const defaultImage = 'https://pocketplanner-storage-5f75b3c5191737-staging.s3.us-east-2.amazonaws.com/public/default-avatar.jpg';
       const imageKey = `${authUser.attributes.sub}-image.jpg`;
       await Storage.put(imageKey, defaultImage, {
         contentType: 'image/jpeg' // the content type of the default image
