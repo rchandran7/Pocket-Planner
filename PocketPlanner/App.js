@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import DefaultStack from './src/Routes/defaultStack'
-import { Amplify, Auth, API, graphqlOperation} from 'aws-amplify';
+import { Amplify, Auth, API, graphqlOperation, Storage} from 'aws-amplify';
 import {withAuthenticator} from 'aws-amplify-react-native';
 import config from './src/aws-exports';
 import {getUser} from './src/graphql/queries';
@@ -10,7 +10,7 @@ import {createUser} from './src/graphql/mutations';
 Amplify.configure(config);
 
 function App() {
-
+  //TODO: Figure out image keys. S3 Bucket. and fix upload image.
   useEffect(() => {
     const syncUser = async () => {
       // get Auth user
@@ -25,13 +25,25 @@ function App() {
 
       if (userData.data.getUser) {
         console.log("User already exists in DB");
+        console.log(userData)
         return;
       }
+      const defaultImage = 'https://pocketplanner-storage-5f75b3c5191737-staging.s3.us-east-2.amazonaws.com/public/default-avatar.jpg';
+      const imageKey = `${authUser.attributes.sub}-image.jpg`;
+      await Storage.put(imageKey, defaultImage, {
+        contentType: 'image/jpeg' // the content type of the default image
+      });
+
       // if there is no users in db, create one
       const newUser = {
         id: authUser.attributes.sub,
         name: authUser.attributes.name,
-        imageUri: 'https://www.pngfind.com/pngs/m/676-6764065_default-profile-picture-transparent-hd-png-download.png',
+        image: {
+          bucket: 'pocketplanner-storage-5f75b3c5191737-staging',
+          region: 'us-east-2',
+          key: imageKey
+
+        },
         bio: "Hey, I am using PocketPlanner"
       };
 

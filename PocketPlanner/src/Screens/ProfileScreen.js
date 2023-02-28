@@ -25,7 +25,9 @@ export default function ProfileScreen({ navigation }) {
         }
       }
       fetchUsers();
+      console.log(user);
     }, [])
+
   );
 
   const handleSignOut = async () => {
@@ -43,7 +45,10 @@ export default function ProfileScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfo}>
-        <Image source={{ uri: user.imageUri }} style={styles.userImg} />
+        <Image
+          source={{ uri: `https://${user.image.bucket}.s3.${user.image.region}.amazonaws.com/public/${user.image.key}` }}
+          style={ styles.userImg }
+        />
         <Text style={styles.name}>{user.name}</Text>
         <Text style={styles.bio}>{user.bio}</Text>
       </View>
