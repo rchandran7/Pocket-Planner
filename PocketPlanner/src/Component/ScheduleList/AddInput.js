@@ -25,19 +25,19 @@ export default function AddInput({submitHandler}) {
 
         <View style = {styles.modalView}>
 
-          <ClassButton onPress={()=> {navigation.navigate("AddTask"); setModalVisible(!modalVisible)}}>
+          <ClassButton onPress={()=> {navigation.navigate("createClass"); setModalVisible(!modalVisible)}}>
             <TextClass>Create Class</TextClass>
           </ClassButton>
 
-          <AddClassButton onPress={()=>{navigation.navigate("AddTask"); setModalVisible(!modalVisible)}}>
+          <AddClassButton onPress={()=>{navigation.navigate("addClass"); setModalVisible(!modalVisible)}}>
             <TextAddClass>Add Class</TextAddClass>
           </AddClassButton>
 
-          <AssignmentButton onPress={()=>{navigation.navigate("AddTask"); setModalVisible(!modalVisible)}}>
+          <AssignmentButton onPress={()=>{navigation.navigate("addAssignment"); setModalVisible(!modalVisible)}}>
             <TextAssignment>Add Assignment</TextAssignment>
           </AssignmentButton>
 
-          <MeetingButton onPress={()=>{navigation.navigate("AddTask"); setModalVisible(!modalVisible)}}>
+          <MeetingButton onPress={()=>{navigation.navigate("addMeeting"); setModalVisible(!modalVisible)}}>
             <TextMeeting>Add Meeting</TextMeeting>
           </MeetingButton>
         </View> 
