@@ -107,13 +107,13 @@ export const listUsers = /* GraphQL */ `
       items {
         id
         name
+        bio
         image {
           bucket
           region
           key
           localUri
         }
-        bio
         createdAt
         updatedAt
         owner
