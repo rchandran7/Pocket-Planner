@@ -20,6 +20,7 @@ export default function ProfileScreen({ navigation }) {
             )
           )
           setUser(userData.data.listUsers.items[0]); // assuming that you want to display the first user from the list
+          console.log(userData.data.listUsers.items[0]);
         } catch (e) {
           console.log(e);
         }

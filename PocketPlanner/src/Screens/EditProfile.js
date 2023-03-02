@@ -60,10 +60,6 @@ export default function EditProfileScreen({ navigation, route }) {
     }
   };
   
-  
-  
-  
-
   const handleSaveProfile = async () => {
     try {
       console.log(useImage);

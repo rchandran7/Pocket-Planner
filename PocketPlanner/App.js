@@ -11,6 +11,7 @@ Amplify.configure(config);
 
 function App() {
   //TODO: Figure out image keys. S3 Bucket. and fix upload image.
+
   useEffect(() => {
     const syncUser = async () => {
       // get Auth user
@@ -28,7 +29,7 @@ function App() {
         console.log(userData)
         return;
       }
-      const defaultImage = 'https://pocketplanner-storage-5f75b3c5191737-staging.s3.us-east-2.amazonaws.com/public/default-avatar.jpg';
+      const defaultImage = 'https://www.pngkit.com/png/full/126-1262807_instagram-default-profile-picture-png.png';
       const imageKey = `${authUser.attributes.sub}-image.jpg`;
       await Storage.put(imageKey, defaultImage, {
         contentType: 'image/jpeg' // the content type of the default image
