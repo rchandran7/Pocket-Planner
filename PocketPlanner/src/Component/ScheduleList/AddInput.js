@@ -11,6 +11,7 @@ export default function AddInput({submitHandler}) {
   const [meetingModalVisible, setMeetingModalVisible] = useState(false);
   return (
     <View style={styles.centeredView}>
+
       <Modal
         animationType="slide"
         transparent = {true}
@@ -19,20 +20,27 @@ export default function AddInput({submitHandler}) {
           Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
+
         <View style = {styles.modalView}>
+
           <ClassButton onPress={()=> setClassModalVisible(true)}>
             <TextClass>Create Class</TextClass>
           </ClassButton>
+
           <AddClassButton onPress={()=>setAddClassModalVisible(true)}>
             <TextAddClass>Add Class</TextAddClass>
           </AddClassButton>
+
           <AssignmentButton onPress={()=>setAssignmentModalVisible(true)}>
             <TextAssignment>Add Assignment</TextAssignment>
           </AssignmentButton>
+
           <MeetingButton onPress={()=>setMeetingModalVisible(true)}>
             <TextMeeting>Add Meeting</TextMeeting>
           </MeetingButton>
+
         </View>
+
         <Modal
           animationType="fade"
           transparent = {true}
@@ -47,6 +55,7 @@ export default function AddInput({submitHandler}) {
             </CloseModalsButton>
           </View>
         </Modal>
+
         <Modal
           animationType="fade"
           transparent = {true}
@@ -61,6 +70,7 @@ export default function AddInput({submitHandler}) {
             </CloseModalsButton>
           </View>
         </Modal>
+
         <Modal
           animationType="fade"
           transparent = {true}
@@ -75,6 +85,7 @@ export default function AddInput({submitHandler}) {
             </CloseModalsButton>
           </View>
         </Modal>
+
         <Modal
           animationType="fade"
           transparent = {true}
@@ -89,12 +100,15 @@ export default function AddInput({submitHandler}) {
             </CloseModalsButton>
           </View>
         </Modal>
+        
       </Modal>
+
       <PlusButton onPress={()=>setModalVisible(true)}>
         <ButtonContainer>
           <AntDesign name = "pluscircle" size = {50} color = "#B0C4DE"/>
         </ButtonContainer>
       </PlusButton>
+
     </View>
   );
 };
