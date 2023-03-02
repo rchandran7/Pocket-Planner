@@ -1,54 +1,50 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Modal, Alert} from 'react-native';
+import { StyleSheet, View, Modal, Alert, TouchableWithoutFeedback} from 'react-native';
 import styled from 'styled-components';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 
 export default function AddInput({submitHandler}) {
   const [modalVisible, setModalVisible] = useState(false);
-  const [classModalVisible, setClassModalVisible] = useState(false);
-  const [addClassModalVisible, setAddClassModalVisible] = useState(false);
-  const [assignmentModalVisible, setAssignmentModalVisible] = useState(false);
-  const [meetingModalVisible, setMeetingModalVisible] = useState(false);
+
   const navigation = useNavigation();
   return (
     <View style={styles.centeredView}>
-
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent = {true}
         visible = {modalVisible}
         onRequestClose={() => {
           Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
+        <TouchableWithoutFeedback onPress={()=>{setModalVisible(!modalVisible)}}>
+          <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', alignItems: 'center' }}>
+            <View style = {styles.modalView}>
+              <ClassButton onPress={()=> {navigation.navigate("AddTask"); setModalVisible(!modalVisible)}}>
+                <TextClass>Create Class</TextClass>
+              </ClassButton>
 
-        <View style = {styles.modalView}>
+              <AddClassButton onPress={()=>{navigation.navigate("AddTask"); setModalVisible(!modalVisible)}}>
+                <TextAddClass>Add Class</TextAddClass>
+              </AddClassButton>
 
-          <ClassButton onPress={()=> {navigation.navigate("AddTask"); setModalVisible(!modalVisible)}}>
-            <TextClass>Create Class</TextClass>
-          </ClassButton>
+              <AssignmentButton onPress={()=>{navigation.navigate("AddTask"); setModalVisible(!modalVisible)}}>
+                <TextAssignment>Add Assignment</TextAssignment>
+              </AssignmentButton>
 
-          <AddClassButton onPress={()=>{navigation.navigate("AddTask"); setModalVisible(!modalVisible)}}>
-            <TextAddClass>Add Class</TextAddClass>
-          </AddClassButton>
-
-          <AssignmentButton onPress={()=>{navigation.navigate("AddTask"); setModalVisible(!modalVisible)}}>
-            <TextAssignment>Add Assignment</TextAssignment>
-          </AssignmentButton>
-
-          <MeetingButton onPress={()=>{navigation.navigate("AddTask"); setModalVisible(!modalVisible)}}>
-            <TextMeeting>Add Meeting</TextMeeting>
-          </MeetingButton>
-        </View> 
+              <MeetingButton onPress={()=>{navigation.navigate("AddTask"); setModalVisible(!modalVisible)}}>
+                <TextMeeting>Add Meeting</TextMeeting>
+              </MeetingButton>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
       </Modal>
-
       <PlusButton onPress={()=>setModalVisible(true)}>
         <ButtonContainer>
-          <AntDesign name = "pluscircle" size = {50} color = "#B0C4DE"/>
+          <AntDesign name = "pluscircle" size = {55} color = "#B0C4DE"/>
         </ButtonContainer>
       </PlusButton>
-
     </View>
   );
 };
@@ -60,11 +56,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalView: {
-    marginTop: 110,
+    marginTop: 180,
     margin: 55,
     backgroundColor: '#B0C4DE',
     borderRadius: 20,
-    padding: 40,
+    padding: 60,
+    paddingVertical: 40,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -93,12 +90,12 @@ const ClassButton = styled.TouchableOpacity`
 const TextClass = styled.Text`
   text-align: center;
   font-size: 25px;
-  color: #FF4500;
+  color: #b22222;
 `;
 const TextAssignment = styled.Text`
   text-align: center;
   font-size: 25px;
-  color: #FF4500;
+  color: #b22222;
 `;
 const AssignmentButton = styled.TouchableOpacity`
   align-items: center;
@@ -113,7 +110,7 @@ const TextAddClass = styled.Text`
   text-align: center;
   font-size: 25px;
   padding-top: 50px;
-  color: #FF4500;
+  color: #b22222;
 `;
 const MeetingButton = styled.TouchableOpacity`
   align-items: center;
@@ -123,5 +120,5 @@ const TextMeeting = styled.Text`
   text-align: center;
   font-size: 25px;
   padding-top: 50px;
-  color: #FF4500;
+  color: #b22222;
 `;
