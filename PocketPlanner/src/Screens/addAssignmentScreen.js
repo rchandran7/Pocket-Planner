@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   TextInput,
-  DatePickerIOS,
   Button,
   StyleSheet,
 } from 'react-native';
@@ -10,6 +9,7 @@ import { API, graphqlOperation } from 'aws-amplify';
 import { createTask } from '../graphql/mutations';
 import { getUser, listUsers } from '../graphql/queries';
 import CalendarPicker from 'react-native-calendar-picker';
+import { useNavigation } from '@react-navigation/native';
 
 const AddTaskForm = () => {
    
@@ -18,14 +18,13 @@ const AddTaskForm = () => {
   const [deadline, setDeadline] = useState(new Date());
 
   const [user, setUser] = useState(null);
-
+  const navigation = useNavigation();
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const userData = await API.graphql(graphqlOperation(listUsers));
         setUser(userData.data.listUsers.items[0]);
         console.log(userData.data.listUsers.items[0]);
-        console.log(user.id);
       } catch (error) {
         console.log('Error fetching user data:', error);
       }
@@ -34,6 +33,10 @@ const AddTaskForm = () => {
   }, []);
 
   const handleAddTask = async () => {
+    if (!name || !description) {
+      Alert.alert('Please enter a task name and description.');
+      return;
+    }
     try {
       const taskDetails = {
         name,
@@ -41,7 +44,7 @@ const AddTaskForm = () => {
         deadline,
         category: '', // add a category property if needed
         completed: false,
-        userID: userId,
+        userID: user.id,
       };
       await API.graphql(graphqlOperation(createTask, { input: taskDetails }));
       setName('');
@@ -50,8 +53,10 @@ const AddTaskForm = () => {
       console.log(name);
       console.log(description);
       console.log(deadline);
+      navigation.popToTop();
     } catch (error) {
       console.log('Error adding task:', error);
+      Alert.alert('Error adding task. Please try again later.');
     }
   };
 
