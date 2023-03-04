@@ -1,42 +1,71 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert, CheckBox } from 'react-native';
 import { Auth, API, graphqlOperation } from 'aws-amplify';
 import { tasksByUserID, listUsers } from '../graphql/queries';
+import { deleteTask } from '../graphql/mutations';
 import { useFocusEffect } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 const TaskList = () => {
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userData = await API.graphql(graphqlOperation(listUsers));
-        setUser(userData.data.listUsers.items[0]);
-        console.log(userData.data.listUsers.items[0]);
-      } catch (error) {
-        console.log('Error fetching user data:', error);
-      }
-    };
-    fetchUser();
-  }, []);
-
-  const fetchTasks = async () => {
+  
+  const fetchUserAndTasks = async () => {
     try {
-      const taskData = await API.graphql(graphqlOperation(tasksByUserID, { userID: user.id }));
-      const tasks = taskData.data.tasksByUserID.items;
-      setTasks(tasks);
-    } catch (err) {
-      console.log('Error fetching tasks:', err);
+      const userData = await API.graphql(graphqlOperation(listUsers));
+      setUser(userData.data.listUsers.items[0]);
+    } catch (error) {
+      console.log('Error fetching user data:', error);
     }
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      // fetch tasks for the logged-in user
+  useEffect(() => {
+    fetchUserAndTasks();
+  }, []);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const taskData = await API.graphql(graphqlOperation(tasksByUserID, { userID: user.id }));
+        const tasks = taskData.data.tasksByUserID.items;
+        setTasks(tasks);
+      } catch (err) {
+        console.log('Error fetching tasks:', err);
+      }
+    };
+  
+    if (user) {
       fetchTasks();
-    }, [])
-  );
+    }
+  }, [user, tasks]);
+  
+
+
+  const handleDeleteTask = (task) => {
+    Alert.alert(
+      'Confirm Delete',
+      `Are you sure you want to delete the task "${task.name}"?`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await API.graphql(graphqlOperation(deleteTask, { input: { id: task.id } }));
+              setTasks(tasks.filter((t) => t !== task));
+            } catch (error) {
+              console.log('Error deleting task:', error);
+            }
+          },
+        },
+      ]
+    );
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -61,28 +90,32 @@ const TaskList = () => {
     <ScrollView contentContainerStyle={styles.taskListContainer}>
       {tasks.map((task) => (
         <View key={task.id} style={styles.taskItem}>
-          <View>
-            <Text style={styles.taskName}>{task.name}</Text>
-            {task.description && (
-              <Text style={styles.taskDescription}>{task.description}</Text>
-            )}
-          </View>
+            <View>
+              <Text style={styles.taskName}>{task.name}</Text>
+              {task.description && (
+                <Text style={styles.taskDescription}>{task.description}</Text>
+              )}
+            </View>
           {task.deadline && (
             <View style={styles.taskDeadline}>
               <Text style={styles.taskDate}>{formatDate(task.deadline)}</Text>
               <Text style={styles.taskTime}>{formatTime(task.deadline)}</Text>
             </View>
           )}
+          <TouchableOpacity onPress={() => handleDeleteTask(task)}>
+            <Icon name="times" color="red" size={20} />
+          </TouchableOpacity>
         </View>
       ))}
     </ScrollView>
-  );
+  );  
 };
 
 const styles = StyleSheet.create({
   taskListContainer: {
     paddingVertical: 16,
     paddingHorizontal: 8,
+    marginTop: 45,
   },
   taskItem: {
     flexDirection: 'row',
