@@ -24,7 +24,7 @@ export default function AddInput({submitHandler}) {
               <ClassButton onPress={()=> {navigation.navigate("AddTask"); setModalVisible(!modalVisible)}}>
                 <TextClass>Create Class</TextClass>
               </ClassButton>
-
+              
               <AddClassButton onPress={()=>{navigation.navigate("AddTask"); setModalVisible(!modalVisible)}}>
                 <TextAddClass>Add Class</TextAddClass>
               </AddClassButton>

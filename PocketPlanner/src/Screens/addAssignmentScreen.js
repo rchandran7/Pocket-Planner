@@ -1,80 +1,104 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Keyboard } from 'react-native'
-import { TextInput } from 'react-native'
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  TextInput,
+  Button,
+  StyleSheet,
+} from 'react-native';
+import { API, graphqlOperation } from 'aws-amplify';
+import { createTask } from '../graphql/mutations';
+import { getUser, listUsers } from '../graphql/queries';
+import CalendarPicker from 'react-native-calendar-picker';
 import { useNavigation } from '@react-navigation/native';
 
-export default function Task() {
+const AddTaskForm = () => {
+   
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [deadline, setDeadline] = useState(new Date());
 
-    const [title, setTitle] = useState('');
-    const [desc, setDesc] = useState('');
-    const [priority, setPriority] = useState();
-    const [taskItems, setTaskItems] = useState([]);
+  const [user, setUser] = useState(null);
+  const navigation = useNavigation();
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await API.graphql(graphqlOperation(listUsers));
+        setUser(userData.data.listUsers.items[0]);
+        console.log(userData.data.listUsers.items[0]);
+      } catch (error) {
+        console.log('Error fetching user data:', error);
+      }
+    };
+    fetchUser();
+  }, []);
 
-    const handleAddTask = () => {
-        setTaskItems([...taskItems, title, desc, priority]);
-        console.log(title, desc, priority);
-        setTitle(null);
-        setDesc(null);
-        setPriority(null);
+  const handleAddTask = async () => {
+    if (!name || !description) {
+      Alert.alert('Please enter a task name and description.');
+      return;
     }
-    const navigation = useNavigation();
-    return (
-        <View style={styles.body}>
+    try {
+      const taskDetails = {
+        name,
+        description,
+        deadline,
+        category: '', // add a category property if needed
+        completed: false,
+        userID: user.id,
+      };
+      await API.graphql(graphqlOperation(createTask, { input: taskDetails }));
+      setName('');
+      setDescription('');
+      setDeadline(new Date());
+      console.log(name);
+      console.log(description);
+      console.log(deadline);
+      navigation.popToTop();
+    } catch (error) {
+      console.log('Error adding task:', error);
+      Alert.alert('Error adding task. Please try again later.');
+    }
+  };
 
-            <TextInput 
-                value={title}
-                style={styles.input}
-                placeholder= 'Title'
-                onChangeText={(value) => setTitle(value)}
-            />
-            <TextInput 
-                value={desc}
-                style={styles.input}
-                placeholder= 'Description'
-                multiline
-                onChangeText={(value) => setDesc(value)}
-            />
-            <TextInput 
-                value={priority}
-                style={styles.input}
-                placeholder= 'Set Priority'
-                keyboardType='number-pad'
-                onChangeText={(value) => setPriority(value)}
-            />
-
-            <TouchableOpacity style={styles.button} onPress={handleAddTask}>
-                <AntDesign name={'checkcircle'} size={50} />
-            </TouchableOpacity>
-
-        </View>
-    )
-}
+  return (
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter task name"
+        value={name}
+        onChangeText={(text) => setName(text)}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Enter task description"
+        value={description}
+        onChangeText={(text) => setDescription(text)}
+      />
+      <CalendarPicker
+        onDateChange={(date) => setDeadline(date)}
+        selectedStartDate={deadline}
+        minDate={new Date()}
+      />
+      <Button title="Add Task" onPress={handleAddTask} />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    body: {
-        flex: 1,
-        alignItems: 'center',
-        padding: 10,
-    },
-    input: {
-        width: '100%',
-        borderWidth: 1,
-        borderColor: '#C0C0C0',
-        borderRadius: 20,
-        backgroundColor: '#fff',
-        textAlign: 'left',
-        fontSize: 20,
-        margin: 10,
-        paddingVertical: 5,
-        paddingHorizontal: 15,
-    },
-    button: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'absolute',
-        bottom: 50,
-        elevation: 5,
-        
-    },
-})
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    padding: 10,
+    marginBottom: 10,
+    width: '100%',
+  },
+});
+
+export default AddTaskForm;

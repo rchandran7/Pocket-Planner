@@ -12,6 +12,7 @@ export default function ProfileScreen({ navigation }) {
 
   useFocusEffect(
     React.useCallback(() => {
+      
       const fetchUsers = async () => {
         try {
           const userData = await API.graphql(

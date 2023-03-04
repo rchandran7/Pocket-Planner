@@ -12,6 +12,7 @@ export default function EditProfileScreen({ navigation, route }) {
   const [name, setName] = useState(user.name);
   const [bio, setBio] = useState(user.bio);
   const [useImage, setImage] = useState(user.image);
+  
   console.log(useImage);
   useEffect(() => {
     navigation.setOptions({ headerTitle: 'Edit Profile' });
