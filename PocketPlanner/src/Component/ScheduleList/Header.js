@@ -29,7 +29,7 @@ const HeaderText = styled.Text`
 `;
 
 const HeaderList = styled.Text`
-  color: #FF4500;
+  color: #b22222;
   font-size: 20px;
   margin-right: 7px;
   margin-top: 10px;
