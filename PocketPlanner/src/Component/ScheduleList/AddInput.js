@@ -76,12 +76,13 @@ const styles = StyleSheet.create({
 const PlusButton = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
+  margin-top: 75px;
+  margin-right: 20px;
 `;
 
 const ButtonContainer = styled.View`
   align-items: center;
   justify-content: center;
-  padding-bottom: 40px;
 `;
 const ClassButton = styled.TouchableOpacity`
   align-items: center;

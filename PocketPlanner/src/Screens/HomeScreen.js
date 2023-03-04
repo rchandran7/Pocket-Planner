@@ -1,65 +1,202 @@
-import React, { useState } from 'react';
-import { View, StatusBar, FlatList} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { API, graphqlOperation } from 'aws-amplify';
+import { tasksByUserID, listUsers } from '../graphql/queries';
+import { deleteTask } from '../graphql/mutations';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import styled from 'styled-components';
-import AddInput from '../Component/ScheduleList/AddInput';
-import TodoList from '../Component/ScheduleList/TodoList';
 import Header from '../Component/ScheduleList/Header';
-import Empty from '../Component/ScheduleList/Empty';
+import AddInput from '../Component/ScheduleList/AddInput';
 
-export default function HomeScreen() {
-  const [data, setData] = useState([]);
+const TaskList = () => {
+  const [user, setUser] = useState(null);
+  const [tasks, setTasks] = useState([]);
+  
+  const fetchUserAndTasks = async () => {
+    try {
+      const userData = await API.graphql(graphqlOperation(listUsers));
+      setUser(userData.data.listUsers.items[0]);
+    } catch (error) {
+      console.log('Error fetching user data:', error);
+    }
+  };
 
-  const submitHandler = (value) => {
-    setData((prevTodo) => {
-      return [
+  useEffect(() => {
+    fetchUserAndTasks();
+  }, []);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const taskData = await API.graphql(graphqlOperation(tasksByUserID, { userID: user.id }));
+        const tasks = taskData.data.tasksByUserID.items;
+        setTasks(tasks);
+      } catch (err) {
+        console.log('Error fetching tasks:', err);
+      }
+    };
+  
+    if (user) {
+      fetchTasks();
+    }
+  }, [user, tasks]);
+  
+
+
+  const handleDeleteTask = (task) => {
+    Alert.alert(
+      'Confirm Delete',
+      `Are you sure you want to delete the task "${task.name}"?`,
+      [
         {
-          value: value,
-          key: Math.random().toString(),
+          text: 'Cancel',
+          style: 'cancel',
         },
-        ...prevTodo,
-      ];
-    });
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await API.graphql(graphqlOperation(deleteTask, { input: { id: task.id } }));
+              setTasks(tasks.filter((t) => t !== task));
+            } catch (error) {
+              console.log('Error deleting task:', error);
+            }
+          },
+        },
+      ]
+    );
   };
 
-  const deleteItem = (key) => {
-    setData((prevTodo) => {
-      return prevTodo.filter((todo) => todo.key != key);
-    });
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = {
+      month: '2-digit',
+      day: '2-digit',
+    };
+    return date.toLocaleDateString('en-US', options);
   };
 
+  const formatTime = (dateString) => {
+    const date = new Date(dateString);
+    const options = {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    };
+    return date.toLocaleTimeString('en-US', options);
+  };
+
+  if (tasks.length === 0) {
     return (
       <ComponentContainer>
-
-        <View>
-          <StatusBar barStyle="light-content" 
-            backgroundColor="#B0C4DE" />
-        </View>
-
-        <View>
-          <FlatList
-            data = {data}
-            ListHeaderComponent = {() => <Header />}
-            ListEmptyComponent = {() => <Empty />}
-            keyExtractor = {(item) => item.key}
-            renderItem = {({item}) => (
-              <TodoList item = {item} deleteItem = {deleteItem} />
-            )}
-          />
-
-          <View>
-            <AddInput submitHandler={submitHandler} />
-          </View>
-        </View>
-        
+        <EmptyImage
+          source={require("../../assets/Schedule-Transparent-Background.png")}
+        />
+        <EmptyText>Nothing scheduled!</EmptyText>
+        <AddInput />
       </ComponentContainer>
     );
-}
+  }
 
-  
+  return (
+    <ScrollView contentContainerStyle={styles.taskListContainer}>
+      <View style={styles.headerContainer}>
+        <View style={styles.header}>
+          <Header/>
+        </View>
+        <View style={styles.addInputContainer}>
+          <AddInput/>
+        </View>
+      </View>
+      {tasks.map((task, index) => (
+        <View key={task.id} style={[styles.taskItem, index === 0 && { marginTop: 40 }]}>
+            <View>
+              <Text style={styles.taskName}>{task.name}</Text>
+              {task.description && (
+                <Text style={styles.taskDescription}>{task.description}</Text>
+              )}
+            </View>
+          {task.deadline && (
+            <View style={styles.taskDeadline}>
+              <Text style={styles.taskDate}>{formatDate(task.deadline)}</Text>
+              <Text style={styles.taskTime}>{formatTime(task.deadline)}</Text>
+            </View>
+          )}
+          <TouchableOpacity onPress={() => handleDeleteTask(task)}>
+            <Icon name="times" color="red" size={20} />
+          </TouchableOpacity>
+        </View>
+      ))}
+    </ScrollView>
+  );  
+};
+
+const styles = StyleSheet.create({
+  taskListContainer: {
+    paddingVertical: 15,
+    paddingHorizontal: 8,
+  },
+  taskItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: '#B0C4DE',
+    borderRadius: 8,
+  },
+  taskName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  taskDescription: {
+    fontSize: 14,
+    color: 'gray',
+  },
+  taskDeadline: {
+    alignItems: 'flex-end',
+  },
+  taskDate: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  taskTime: {
+    fontSize: 12,
+    color: 'gray',
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    paddingHorizontal: 16,
+    paddingBottom: 8,
+  },
+  header: {
+    flex: 1,
+  },
+  addInputContainer: {
+    alignItems: 'flex-end',
+    paddingRight: 8,
+    flex: 1,
+  },
+});
 const ComponentContainer = styled.View`
-  background-color: white;
-  height: 100%;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-left: 20px;
+  height: 825px;
 `;
+
+const EmptyImage = styled.Image`
+  width: 350px;
+  height: 350px;
+`;
+
+const EmptyText = styled.Text`
+  color: black;
+  margin-top: 30px;
+  font-size: 30px;
+`;
+
+export default TaskList;
