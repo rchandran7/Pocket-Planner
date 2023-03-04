@@ -4,7 +4,7 @@ import { TextInput } from 'react-native'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 
-export default function addClass() {
+export default function AddClass() {
 
     const [title, setTitle] = useState('');
     const [desc, setDesc] = useState('');
