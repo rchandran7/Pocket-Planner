@@ -7,7 +7,12 @@ import {getUser} from './src/graphql/queries';
 import {createUser} from './src/graphql/mutations';
 
 
-Amplify.configure(config);
+Amplify.configure({
+  ...config,
+  Analytics: {
+    disabled: true,
+  },
+});
 
 function App() {
   //TODO: Figure out image keys. S3 Bucket. and fix upload image.
