@@ -55,6 +55,22 @@ export default function ProfileScreen({ navigation }) {
         <Text style={styles.name}>{user.name}</Text>
         <Text style={styles.bio}>{user.bio}</Text>
       </View>
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.completeButton}>
+          <Text style={styles.stats}>25</Text>
+          <Text style={styles.statDescription}>Tasks Completed</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.inProgButton}>
+          <Text style={styles.stats}>25</Text>
+          <Text style={styles.statDescription}>Tasks In Progress</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.overdueButton}>
+          <Text style={styles.stats}>25</Text>
+          <Text style={styles.statDescription}>Tasks Overdue</Text>
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.editButton}
@@ -62,18 +78,7 @@ export default function ProfileScreen({ navigation }) {
         >
           <Text style={styles.buttonText}>Edit Profile</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.signOutButton}
-          onPress={handleSignOut}
-        >
-          <Text style={styles.buttonText}>Sign Out</Text>
-        </TouchableOpacity>
       </View>
-      <ComponentContainer>
-          <LogoImage
-            source={require("../../assets/Logo_PocketPlanner.jpg")}
-          />
-        </ComponentContainer>
     </SafeAreaView>
   );
 }
@@ -83,6 +88,33 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 20,
+  },
+  stats: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  statDescription: {
+    fontSize: 12,
+    textAlign: 'center',
+  },
+  completeButton: {
+    backgroundColor: '#95D787',
+    borderRadius: 10,
+    padding: 5,
+    width: '32%',
+  },
+  inProgButton: {
+    backgroundColor: '#B0C4DE',
+    borderRadius: 10,
+    padding: 5,
+    width: '32%',
+  },
+  overdueButton: {
+    backgroundColor: '#F36C6C',
+    borderRadius: 10,
+    padding: 5,
+    width: '32%',
   },
   userInfo: {
     alignItems: 'center'
@@ -109,23 +141,17 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 20,
   },
   editButton: {
     backgroundColor: '#B0C4DE',
     borderRadius: 10,
     padding: 10,
     alignItems: 'center',
-    width: '48%',
-  },
-  signOutButton: {
-    backgroundColor: '#b22222',
-    borderRadius: 10,
-    padding: 10,
-    alignItems: 'center',
-    width: '48%',
+    width: '100%',
   },
   buttonText: {
-    color: '#fff',
+    color: '#000',
     fontWeight: 'bold',
   }
 });
@@ -135,6 +161,6 @@ const ComponentContainer = styled.View`
   height: 450px;
 `;
 const LogoImage = styled.Image`
-  width: 325px;
-  height: 325px;
+  width: 200px;
+  height: 200px;
 `;

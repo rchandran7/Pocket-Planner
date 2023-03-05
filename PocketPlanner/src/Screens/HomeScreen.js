@@ -11,7 +11,12 @@ import AddInput from '../Component/ScheduleList/AddInput';
 const TaskList = () => {
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
-  const [cutoffDate, setCutoffDate] = useState(new Date()); // initial cutoff date is today
+  const [cutoffDate, setCutoffDate] = useState(() => {
+    const date = new Date();
+    date.setFullYear(date.getFullYear() + 1); // add 1 to the current year
+    return date;
+  });
+  // initial cutoff date is today
 
   const handleOptionChange = (selectedOption) => {
     let daysToAdd = 365;
@@ -165,7 +170,7 @@ const TaskList = () => {
       </View>
 
       {tasks
-      .filter(task => !task.deadline || (new Date(task.deadline) >= today && new Date(task.deadline) <= cutoffDate))
+      .filter(task => !task.deadline || (new Date(task.deadline) <= cutoffDate))
       .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
       .map((task, index) => (
 
