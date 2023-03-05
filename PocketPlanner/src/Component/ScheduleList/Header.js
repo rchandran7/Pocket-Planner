@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Button, TouchableOpacity, Text, StyleSheet, Modal, View, FlatList } from "react-native";
 import styled from "styled-components";
 
-const options = ["All", "Today", "Next 7 Days", "Next 30 Days"]; // example date options
+ // example date options
 
-export default function Header() {
+export default function Header({ onOptionChange }) {
+  const options = ["All", "Today", "Next 7 Days", "Next 30 Days"];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(options[0]);
-
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -15,9 +15,9 @@ export default function Header() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-
-  const handleSelectDate = (date) => {
-    setSelectedDate(date);
+  const handleOptionPress = (option) => {
+    setSelectedDate(option);
+    onOptionChange(option);
     setIsModalOpen(false);
   };
 
@@ -42,7 +42,7 @@ export default function Header() {
 
               <TouchableOpacity
                 style={styles.optionContainer}
-                onPress={() => handleSelectDate(item)}
+                onPress={() => handleOptionPress(item)}
               >
                 <Text style={styles.optionStyle}>{item}</Text>
               </TouchableOpacity>
