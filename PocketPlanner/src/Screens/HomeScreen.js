@@ -11,7 +11,34 @@ import AddInput from '../Component/ScheduleList/AddInput';
 const TaskList = () => {
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
-  
+  const [cutoffDate, setCutoffDate] = useState(() => {
+    const date = new Date();
+    date.setFullYear(date.getFullYear() + 1); // add 1 to the current year
+    return date;
+  });
+  // initial cutoff date is today
+
+  const handleOptionChange = (selectedOption) => {
+    let daysToAdd = 365;
+    switch (selectedOption) {
+      case "Today":
+        daysToAdd = 0;
+        break;
+      case "Next 7 Days":
+        daysToAdd = 7;
+        break;
+      case "Next 30 Days":
+        daysToAdd = 30;
+        break;
+      default:
+        break;
+    }
+    const newCutoffDate = new Date();
+    console.log(newCutoffDate.setDate(newCutoffDate.getDate()))
+    newCutoffDate.setDate(newCutoffDate.getDate() + daysToAdd);
+    setCutoffDate(newCutoffDate);
+  };
+
   const fetchUserAndTasks = async () => {
     try {
       const userData = await API.graphql(graphqlOperation(listUsers));
@@ -40,8 +67,6 @@ const TaskList = () => {
       fetchTasks();
     }
   }, [user, tasks]);
-  
-
 
   const handleDeleteTask = (task) => {
     Alert.alert(
@@ -99,9 +124,8 @@ const TaskList = () => {
         },
       ]
     );
-    }
+  }
   
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const options = {
@@ -130,20 +154,25 @@ const TaskList = () => {
       </ComponentContainer>
     );
   }
+  const today = new Date();
+
 
   return (
     <ScrollView contentContainerStyle={styles.taskListContainer}>
 
       <View style={styles.headerContainer}>
         <View style={styles.header}>
-          <Header/>
+          <Header onOptionChange={handleOptionChange}/>
         </View>
         <View style={styles.addInputContainer}>
           <AddInput/>
         </View>
       </View>
 
-      {tasks.sort((a, b) => new Date(a.deadline) - new Date(b.deadline)).map((task, index) => (
+      {tasks
+      .filter(task => !task.deadline || (new Date(task.deadline) <= cutoffDate))
+      .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
+      .map((task, index) => (
 
         <TouchableOpacity key={task.id} onPress={() => handleConfirmCompleted(task)} 
         style={[

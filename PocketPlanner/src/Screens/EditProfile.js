@@ -39,7 +39,6 @@ export default function EditProfileScreen({ navigation, route }) {
         const extension = result.uri.split('.').pop();
         const key = `${user.attributes.sub}-profile-image.${extension}`;
         const contentType = `image/${extension}`;
-        console.log(extension);
         const response = await fetch(result.uri);
         const blob = await response.blob();
   
@@ -52,9 +51,6 @@ export default function EditProfileScreen({ navigation, route }) {
           key: s3Response.key,
           localUri: result.uri
         });
-
-        console.log(s3Response.key);
-        console.log(useImage.key);
       }
     } catch (e) {
       console.log('Error selecting image', e);
@@ -78,8 +74,6 @@ export default function EditProfileScreen({ navigation, route }) {
           }
         })
       );
-      
-      console.log('User profile updated:', updatedUser);
       navigation.navigate('bottomTabs');
     } catch (e) {
       console.log('Error updating user profile', e);
