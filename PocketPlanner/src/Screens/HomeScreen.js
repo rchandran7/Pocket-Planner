@@ -130,6 +130,13 @@ const TaskList = () => {
       </ComponentContainer>
     );
   }
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  nextWeek = new Date();
+  nextWeek.setDate(nextWeek.getDate() + 7);
+
+  const cutoffDate = new Date(tomorrow.getFullYear(), tomorrow.getMonth(), tomorrow.getDate());
 
   return (
     <ScrollView contentContainerStyle={styles.taskListContainer}>
@@ -143,7 +150,10 @@ const TaskList = () => {
         </View>
       </View>
 
-      {tasks.sort((a, b) => new Date(a.deadline) - new Date(b.deadline)).map((task, index) => (
+      {tasks
+      .filter(task => !task.deadline || new Date(task.deadline) <= cutoffDate)
+      .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
+      .map((task, index) => (
 
         <TouchableOpacity key={task.id} onPress={() => handleConfirmCompleted(task)} 
         style={[
