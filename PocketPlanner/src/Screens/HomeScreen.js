@@ -158,8 +158,7 @@ const TaskList = () => {
 
 
   return (
-    <ScrollView contentContainerStyle={styles.taskListContainer}>
-
+    <View>
       <View style={styles.headerContainer}>
         <View style={styles.header}>
           <Header onOptionChange={handleOptionChange}/>
@@ -168,45 +167,47 @@ const TaskList = () => {
           <AddInput/>
         </View>
       </View>
+      <ScrollView contentContainerStyle={styles.taskListContainer}>
 
-      {tasks
-      .filter(task => !task.deadline || (new Date(task.deadline) <= cutoffDate))
-      .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
-      .map((task, index) => (
+        {tasks
+        .filter(task => !task.deadline || (new Date(task.deadline) <= cutoffDate))
+        .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
+        .map((task, index) => (
 
-        <TouchableOpacity key={task.id} onPress={() => handleConfirmCompleted(task)} 
-        style={[
-          styles.taskItem,
-          index === 0 && { marginTop: 40 },
-          task.completed ? styles.taskItemCompleted : styles.taskItem,
-        ]}
-        >
+          <TouchableOpacity key={task.id} onPress={() => handleConfirmCompleted(task)} 
+          style={[
+            styles.taskItem,
+            index === 0 && { marginTop: 40 },
+            task.completed ? styles.taskItemCompleted : styles.taskItem,
+          ]}
+          >
 
-            <View style={{ flex: 1 }}>
-              <Text style={styles.taskName}>{task.name}</Text>
-              {task.description && (
-                <Text style={styles.taskDescription}>{task.description}</Text>
-              )}
-            </View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.taskName}>{task.name}</Text>
+                {task.description && (
+                  <Text style={styles.taskDescription}>{task.description}</Text>
+                )}
+              </View>
 
-          {task.deadline && (
+            {task.deadline && (
 
-            <View style={styles.taskDeadline}>
-              <Text style={styles.taskDate}>{formatDate(task.deadline)}</Text>
-              <Text style={styles.taskTime}>{formatTime(task.deadline)}</Text>
-            </View>
+              <View style={styles.taskDeadline}>
+                <Text style={styles.taskDate}>{formatDate(task.deadline)}</Text>
+                <Text style={styles.taskTime}>{formatTime(task.deadline)}</Text>
+              </View>
 
-          )}
+            )}
 
-          <TouchableOpacity onPress={() => handleDeleteTask(task)} style={{ marginLeft: 10 }}>
-            <Icon name="times" color="red" size={20} />
+            <TouchableOpacity onPress={() => handleDeleteTask(task)} style={{ marginLeft: 10 }}>
+              <Icon name="times" color="red" size={20} />
+            </TouchableOpacity>
+
           </TouchableOpacity>
 
-        </TouchableOpacity>
+        ))}
 
-      ))}
-
-    </ScrollView>
+      </ScrollView>
+    </View>
   );  
 };
 
