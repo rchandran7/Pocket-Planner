@@ -75,7 +75,7 @@ const TaskList = () => {
       [
         {
           text: 'Cancel',
-          style: 'cancel',
+          style: 'default',
         },
         {
           text: 'Delete',
@@ -109,11 +109,11 @@ const TaskList = () => {
       [
         {
           text: 'Cancel',
-          style: 'cancel',
+          style: 'destructive',
         },
         {
           text: 'Confirm',
-          style: 'destructive',
+          style: 'default',
           onPress: async () => {
             try {
               await API.graphql(graphqlOperation(updateTask, { input: { id: task.id, completed: !task.completed } }));
