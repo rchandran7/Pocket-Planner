@@ -7,10 +7,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import styled from 'styled-components';
 import Header from '../Component/ScheduleList/Header';
 import AddInput from '../Component/ScheduleList/AddInput';
+import CalendarView from '../Component/ScheduleList/Calendar';
 
 const TaskList = () => {
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
+  const [selectedOption, setSelectedOption] = useState("All");
   const [cutoffDate, setCutoffDate] = useState(() => {
     const date = new Date();
     date.setFullYear(date.getFullYear() + 1); // add 1 to the current year
@@ -21,6 +23,8 @@ const TaskList = () => {
   const handleOptionChange = (selectedOption) => {
     let daysToAdd = 365;
     switch (selectedOption) {
+      case "All":
+        break;
       case "Today":
         daysToAdd = 0;
         break;
@@ -30,6 +34,9 @@ const TaskList = () => {
       case "Next 30 Days":
         daysToAdd = 30;
         break;
+      case "Calendar View":
+        setSelectedOption("Calendar View");
+        return;
       default:
         break;
     }
@@ -37,6 +44,7 @@ const TaskList = () => {
     console.log(newCutoffDate.setDate(newCutoffDate.getDate()))
     newCutoffDate.setDate(newCutoffDate.getDate() + daysToAdd);
     setCutoffDate(newCutoffDate);
+    setSelectedOption(selectedOption);
   };
 
   const fetchUserAndTasks = async () => {
@@ -156,6 +164,21 @@ const TaskList = () => {
   }
   const today = new Date();
 
+  if (selectedOption == "Calendar View") {
+    return (
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <View style={styles.header}>
+            <Header onOptionChange={handleOptionChange}/>
+          </View>
+          <View style={styles.addInputContainer}>
+            <AddInput/>
+          </View>
+        </View>
+        <CalendarView tasks={tasks} />
+      </View>
+    );
+  }
 
   return (
     <View>
@@ -212,6 +235,9 @@ const TaskList = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   taskListContainer: {
     paddingVertical: 15,
     paddingHorizontal: 8,
@@ -262,6 +288,7 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     paddingHorizontal: 16,
     paddingBottom: 8,
+    marginTop: 20,
   },
   header: {
     flex: 1,
@@ -289,5 +316,6 @@ const EmptyText = styled.Text`
   margin-top: 30px;
   font-size: 30px;
 `;
+
 
 export default TaskList;
