@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 
-const tasks = [
-  { id: '1', date: '2023-03-08', title: 'Task 1' },
-  { id: '2', date: '2023-03-09', title: 'Task 2' },
-  { id: '3', date: '2023-03-10', title: 'Task 3' },
-];
-
-const CalendarView = () => {
+const CalendarView = ({tasks}) => {
   const [selectedDate, setSelectedDate] = useState('');
 
   const markedDates = tasks.reduce((obj, task) => {
-    obj[task.date] = { marked: true };
+    obj[task.deadline] = {
+      marked: true,
+      dotColor: 'blue'
+    };
     return obj;
   }, {});
 
@@ -33,7 +30,9 @@ const CalendarView = () => {
             .filter((task) => task.date === selectedDate)
             .map((task) => (
               <View key={task.id} style={styles.task}>
-                <Text>{task.title}</Text>
+                  <Text style={styles.taskTitle}>{task.name}</Text>
+                  <Text style={styles.taskDescription}>{task.description}</Text>
+                  <Text style={styles.taskTime}>{formatTime(task.deadline)}</Text>
               </View>
             ))}
         </View>
@@ -45,6 +44,7 @@ const CalendarView = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 110,
   },
   taskList: {
     marginVertical: 16,
