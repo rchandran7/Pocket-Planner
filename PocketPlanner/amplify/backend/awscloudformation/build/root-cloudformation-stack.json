@@ -152,34 +152,60 @@
         }
       }
     },
+    "apipocketplanner": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-pocketplanner-staging-191737-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "Parameters": {
+          "AppSyncApiName": "pocketplanner",
+          "DynamoDBBillingMode": "PAY_PER_REQUEST",
+          "DynamoDBEnableServerSideEncryption": false,
+          "AuthCognitoUserPoolId": {
+            "Fn::GetAtt": [
+              "authPocketPlanner",
+              "Outputs.UserPoolId"
+            ]
+          },
+          "authRoleName": {
+            "Ref": "AuthRoleName"
+          },
+          "unauthRoleName": {
+            "Ref": "UnauthRoleName"
+          },
+          "S3DeploymentBucket": "amplify-pocketplanner-staging-191737-deployment",
+          "S3DeploymentRootKey": "amplify-appsync-files/d2360035eac44b9727eddbe2b26321061e62bc7d",
+          "env": "staging"
+        }
+      }
+    },
     "authPocketPlanner": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/amplify-pocketplanner-staging-220118-deployment/amplify-cfn-templates/auth/PocketPlanner-cloudformation-template.json",
+        "TemplateURL": "https://s3.amazonaws.com/amplify-pocketplanner-staging-191737-deployment/amplify-cfn-templates/auth/PocketPlanner-cloudformation-template.json",
         "Parameters": {
           "identityPoolName": "testAuthIdentityPool",
           "allowUnauthenticatedIdentities": false,
-          "resourceNameTruncated": "pocket58a023ba",
+          "resourceNameTruncated": "pocketec5584fd",
           "userPoolName": "PocketPlanner",
           "autoVerifiedAttributes": "email",
           "mfaConfiguration": "OFF",
           "mfaTypes": "SMS Text Message",
           "smsAuthenticationMessage": "Your authentication code is {####}",
           "smsVerificationMessage": "Your verification code is {####}",
-          "emailVerificationSubject": "Pocket Planner Email Verification",
+          "emailVerificationSubject": "Verification code: {####}",
           "emailVerificationMessage": "Verification code: {####}",
           "defaultPasswordPolicy": false,
-          "passwordPolicyMinLength": 7,
+          "passwordPolicyMinLength": 6,
           "passwordPolicyCharacters": "",
-          "requiredAttributes": "email,preferred_username",
+          "requiredAttributes": "email,name",
           "aliasAttributes": "",
           "userpoolClientGenerateSecret": false,
           "userpoolClientRefreshTokenValidity": 30,
           "userpoolClientWriteAttributes": "",
           "userpoolClientReadAttributes": "",
-          "userpoolClientLambdaRole": "Pocket58a023ba_userpoolclient_lambda_role",
+          "userpoolClientLambdaRole": "Pocketec5584fd_userpoolclient_lambda_role",
           "userpoolClientSetAttributes": false,
-          "sharedId": "58a023ba",
+          "sharedId": "ec5584fd",
           "resourceName": "PocketPlanner",
           "authSelections": "identityPoolAndUserPool",
           "serviceName": "Cognito",
@@ -205,6 +231,39 @@
           },
           "breakCircularDependency": true,
           "dependsOn": "",
+          "env": "staging"
+        }
+      }
+    },
+    "storages3pocketplannerstorage5f75b3c5": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-pocketplanner-staging-191737-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
+        "Parameters": {
+          "bucketName": "pocketplanner-storage-5f75b3c5",
+          "selectedGuestPermissions": "",
+          "selectedAuthenticatedPermissions": "s3:PutObject,s3:GetObject,s3:ListBucket,s3:DeleteObject",
+          "unauthRoleName": {
+            "Ref": "UnauthRoleName"
+          },
+          "authRoleName": {
+            "Ref": "AuthRoleName"
+          },
+          "s3PrivatePolicy": "Private_policy_451d4525",
+          "s3ProtectedPolicy": "Protected_policy_451d4525",
+          "s3PublicPolicy": "Public_policy_451d4525",
+          "s3ReadPolicy": "read_policy_451d4525",
+          "s3UploadsPolicy": "Uploads_policy_451d4525",
+          "authPolicyName": "s3_amplify_451d4525",
+          "unauthPolicyName": "s3_amplify_451d4525",
+          "AuthenticatedAllowList": "ALLOW",
+          "GuestAllowList": "DISALLOW",
+          "s3PermissionsAuthenticatedPrivate": "s3:PutObject,s3:GetObject,s3:DeleteObject",
+          "s3PermissionsAuthenticatedProtected": "s3:PutObject,s3:GetObject,s3:DeleteObject",
+          "s3PermissionsAuthenticatedPublic": "s3:PutObject,s3:GetObject,s3:DeleteObject",
+          "s3PermissionsAuthenticatedUploads": "s3:PutObject",
+          "s3PermissionsGuestPublic": "DISALLOW",
+          "s3PermissionsGuestUploads": "DISALLOW",
           "env": "staging"
         }
       }

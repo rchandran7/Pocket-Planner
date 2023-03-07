@@ -1,5 +1,5 @@
 {
-  "Description": "{\"createdOn\":\"Linux\",\"createdBy\":\"AmplifyAdmin\",\"createdWith\":\"10.6.2-rc.04424cfbc.0\",\"stackType\":\"auth-Cognito\",\"metadata\":{}}",
+  "Description": "{\"createdOn\":\"Linux\",\"createdBy\":\"AmplifyAdmin\",\"createdWith\":\"10.7.0-rc.4b3db16df.0\",\"stackType\":\"auth-Cognito\",\"metadata\":{}}",
   "AWSTemplateFormatVersion": "2010-09-09",
   "Parameters": {
     "env": {
@@ -173,7 +173,7 @@
           },
           {
             "Mutable": true,
-            "Name": "preferred_username",
+            "Name": "name",
             "Required": true
           }
         ],
@@ -215,7 +215,7 @@
         "UserPoolId": {
           "Ref": "UserPool"
         },
-        "ClientName": "pocket58a023ba_app_clientWeb",
+        "ClientName": "pocketec5584fd_app_clientWeb",
         "RefreshTokenValidity": {
           "Ref": "userpoolClientRefreshTokenValidity"
         },
@@ -233,7 +233,7 @@
         "UserPoolId": {
           "Ref": "UserPool"
         },
-        "ClientName": "pocket58a023ba_app_client",
+        "ClientName": "pocketec5584fd_app_client",
         "GenerateSecret": {
           "Ref": "userpoolClientGenerateSecret"
         },
@@ -273,7 +273,7 @@
               "Fn::Join": [
                 "",
                 [
-                  "upClientLambdaRole58a023ba",
+                  "upClientLambdaRoleec5584fd",
                   {
                     "Fn::Select": [
                       3,
@@ -341,7 +341,7 @@
             }
           ]
         },
-        "PolicyName": "pocket58a023ba_userpoolclient_lambda_iam_policy",
+        "PolicyName": "pocketec5584fd_userpoolclient_lambda_iam_policy",
         "Roles": [
           {
             "Ref": "UserPoolClientRole"
@@ -384,7 +384,7 @@
             }
           ]
         },
-        "PolicyName": "pocket58a023ba_userpoolclient_lambda_log_policy",
+        "PolicyName": "pocketec5584fd_userpoolclient_lambda_log_policy",
         "Roles": [
           {
             "Ref": "UserPoolClientRole"
