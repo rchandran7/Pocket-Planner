@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, TouchableOpacity, Text, StyleSheet, Modal, View, FlatList } from "react-native";
+import { TouchableWithoutFeedback, TouchableOpacity, Text, StyleSheet, Modal, View, FlatList } from "react-native";
 import styled from "styled-components";
 
  // example date options
@@ -29,35 +29,36 @@ export default function Header({ onOptionChange }) {
       <TouchableOpacity onPress={handleOpenModal}>
         <Text style={styles.dateStyle}> {selectedDate} </Text>
       </TouchableOpacity>
-
       <Modal 
-      visible={isModalOpen} 
-      animationType="fade"
-      transparent = {true}
+        visible={isModalOpen} 
+        animationType="fade"
+        transparent = {true}
       >
-        <View style={styles.modalView}>
-          <FlatList
-            data={options}
-            renderItem={({ item }) => (
+        <TouchableWithoutFeedback onPress={handleCloseModal}>
+          <View>
+            <View style={styles.modalView}>
+              <FlatList
+                data={options}
+                renderItem={({ item }) => (
 
-              <TouchableOpacity
-                style={styles.optionContainer}
-                onPress={() => handleOptionPress(item)}
-              >
-                <Text style={styles.optionStyle}>{item}</Text>
+                  <TouchableOpacity
+                    style={styles.optionContainer}
+                    onPress={() => handleOptionPress(item)}
+                  >
+                    <Text style={styles.optionStyle}>{item}</Text>
+                  </TouchableOpacity>
+                )}
+
+                keyExtractor={(item) => item}
+
+              />
+              <TouchableOpacity onPress={handleCloseModal} style={styles.button}> 
+                <Text style={styles.buttonText}>Close</Text>
               </TouchableOpacity>
-            )}
-
-            keyExtractor={(item) => item}
-
-          />
-          <TouchableOpacity onPress={handleCloseModal} style={styles.button}> 
-            <Text style={styles.buttonText}>Close</Text>
-          </TouchableOpacity>
-          
-        </View>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
       </Modal>
-
     </ComponentContainer>
   );
 }
@@ -82,6 +83,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginRight: 7,
   },
+
   modalView: {
     marginTop: 180,
     margin: 55,
