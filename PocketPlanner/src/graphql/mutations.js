@@ -27,6 +27,33 @@ export const createTask = /* GraphQL */ `
     }
   }
 `;
+//TODO: Need updateMeeting, deleteMeeting, createClass, updateClass
+ export const createMeeting =  `
+  mutation CreateMeeting(
+    $input: CreateMeetingInput!
+    $condition: ModelMeetingConditionInput
+  ) {
+    createTask(input: $input, condition: $condition) {
+      id
+      name
+      meetingDate
+      category
+      description
+      completed
+      userID
+      User {
+        id
+        name
+        bio
+        createdAt
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`; 
 export const updateTask = /* GraphQL */ `
   mutation UpdateTask(
     $input: UpdateTaskInput!
@@ -53,6 +80,32 @@ export const updateTask = /* GraphQL */ `
     }
   }
 `;
+export const updateMeeting = /* GraphQL */ `
+  mutation UpdateMeeting(
+    $input: UpdateMeetingInput!
+    $condition: ModelMeetingConditionInput
+  ) {
+    updateMeeting(input: $input, condition: $condition) {
+      id
+      name
+      meetingDate
+      category
+      description
+      completed
+      userID
+      User {
+        id
+        name
+        bio
+        createdAt
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const deleteTask = /* GraphQL */ `
   mutation DeleteTask(
     $input: DeleteTaskInput!
@@ -62,6 +115,32 @@ export const deleteTask = /* GraphQL */ `
       id
       name
       deadline
+      category
+      description
+      completed
+      userID
+      User {
+        id
+        name
+        bio
+        createdAt
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteMeeting = /* GraphQL */ `
+  mutation DeleteMeeting(
+    $input: DeleteMeetingInput!
+    $condition: ModelMeetingConditionInput
+  ) {
+    deleteTask(input: $input, condition: $condition) {
+      id
+      name
+      meetingDate
       category
       description
       completed
