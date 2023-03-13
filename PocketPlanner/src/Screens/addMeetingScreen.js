@@ -13,6 +13,7 @@ export default function AddMeeting() {
     const [description, setDescription] = useState('');
     const [meetingDate, setMeetingDate] = useState();
     const [isRecurring, setIsRecurring] = useState(false);
+    const [isMultiDay, setIsMultiDay] = useState(false);
     const [user, setUser] = useState(null);
     const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
     const navigation = useNavigation();
@@ -29,6 +30,10 @@ export default function AddMeeting() {
     };
     fetchUser();
   }, []);
+
+    const handleReturn = async () =>{
+      navigation.popToTop();
+    }
 
     
     const handleAddMeeting = async () => {
@@ -139,6 +144,15 @@ export default function AddMeeting() {
                 onPress={() => setIsRecurring(!isRecurring)}
             />
         </View>
+        <View style = {styles.inputContainer}>
+            <CheckBox 
+                title = "Is This Meeting Multiple Days Per Week?"
+                value = {isMultiDay}
+                style = {styles.input}
+                checked={isMultiDay}
+                onPress={() => setIsMultiDay(!isMultiDay)}
+            />
+        </View>
     
         <TouchableOpacity onPress={() => setIsDatePickerVisible(true)} style={styles.button}>
           <Text style={styles.buttonText}>Set Meeting Date</Text>
@@ -154,6 +168,9 @@ export default function AddMeeting() {
         />
           <TouchableOpacity onPress={handleAddMeeting} style={styles.addButton}>
             <Text style={styles.buttonText}>Add Meeting</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleReturn} style={styles.addButton}>
+            <Text style={styles.buttonText}>Return to Schedule</Text>
           </TouchableOpacity>
       </View>
             
@@ -200,6 +217,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#B0C4DE',
         borderRadius: 10,
         padding: 10,
+        marginTop: 10,
         alignItems: 'center',
         width: '100%',
       },
