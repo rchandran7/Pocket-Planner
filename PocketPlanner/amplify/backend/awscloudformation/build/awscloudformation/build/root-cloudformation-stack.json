@@ -173,7 +173,7 @@
             "Ref": "UnauthRoleName"
           },
           "S3DeploymentBucket": "amplify-pocketplanner-staging-191737-deployment",
-          "S3DeploymentRootKey": "amplify-appsync-files/d2360035eac44b9727eddbe2b26321061e62bc7d",
+          "S3DeploymentRootKey": "amplify-appsync-files/c2d1ac457ebbc861460e56ba01928e97c0efd5b4",
           "env": "staging"
         }
       }
@@ -343,7 +343,7 @@
           }
         },
         "Handler": "index.handler",
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs16.x",
         "Timeout": 300,
         "Role": {
           "Fn::GetAtt": [

@@ -42,12 +42,12 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync",
-      "lastPushTimeStamp": "2023-02-28T19:53:46.182Z",
+      "lastPushTimeStamp": "2023-03-12T03:17:09.406Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-pocketplanner-staging-191737-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apipocketplanner"
       },
-      "lastPushDirHash": "0R5zT5QaFrLEwfqpM5u6OhLTQrc="
+      "lastPushDirHash": "K2m06yo5/HdYuKsU2f/ES5sBoao="
     }
   },
   "auth": {
@@ -84,7 +84,7 @@
         "IdentityPoolName": "testAuthIdentityPool__staging",
         "UserPoolName": "PocketPlanner"
       },
-      "lastPushTimeStamp": "2023-02-28T19:53:46.137Z",
+      "lastPushTimeStamp": "2023-03-12T03:17:09.346Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-pocketplanner-staging-191737-deployment/amplify-cfn-templates/auth/PocketPlanner-cloudformation-template.json",
         "logicalId": "authPocketPlanner"
@@ -100,7 +100,7 @@
         "BucketName": "pocketplanner-storage-5f75b3c5191737-staging",
         "Region": "us-east-2"
       },
-      "lastPushTimeStamp": "2023-02-28T19:53:46.139Z",
+      "lastPushTimeStamp": "2023-03-12T03:17:09.348Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-pocketplanner-staging-191737-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
         "logicalId": "storages3pocketplannerstorage5f75b3c5"

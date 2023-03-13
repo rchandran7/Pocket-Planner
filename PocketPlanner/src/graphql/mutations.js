@@ -1,6 +1,84 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createMeeting = /* GraphQL */ `
+  mutation CreateMeeting(
+    $input: CreateMeetingInput!
+    $condition: ModelMeetingConditionInput
+  ) {
+    createMeeting(input: $input, condition: $condition) {
+      id
+      name
+      description
+      meetingDate
+      isRecurring
+      userID
+      User {
+        id
+        name
+        bio
+        createdAt
+        updatedAt
+        owner
+      }
+      completed
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateMeeting = /* GraphQL */ `
+  mutation UpdateMeeting(
+    $input: UpdateMeetingInput!
+    $condition: ModelMeetingConditionInput
+  ) {
+    updateMeeting(input: $input, condition: $condition) {
+      id
+      name
+      description
+      meetingDate
+      isRecurring
+      userID
+      User {
+        id
+        name
+        bio
+        createdAt
+        updatedAt
+        owner
+      }
+      completed
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteMeeting = /* GraphQL */ `
+  mutation DeleteMeeting(
+    $input: DeleteMeetingInput!
+    $condition: ModelMeetingConditionInput
+  ) {
+    deleteMeeting(input: $input, condition: $condition) {
+      id
+      name
+      description
+      meetingDate
+      isRecurring
+      userID
+      User {
+        id
+        name
+        bio
+        createdAt
+        updatedAt
+        owner
+      }
+      completed
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createTask = /* GraphQL */ `
   mutation CreateTask(
     $input: CreateTaskInput!
@@ -27,33 +105,6 @@ export const createTask = /* GraphQL */ `
     }
   }
 `;
-//TODO: Need updateMeeting, deleteMeeting, createClass, updateClass
- export const createMeeting =  `
-  mutation CreateMeeting(
-    $input: CreateMeetingInput!
-    $condition: ModelMeetingConditionInput
-  ) {
-    createTask(input: $input, condition: $condition) {
-      id
-      name
-      meetingDate
-      category
-      description
-      completed
-      userID
-      User {
-        id
-        name
-        bio
-        createdAt
-        updatedAt
-        owner
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`; 
 export const updateTask = /* GraphQL */ `
   mutation UpdateTask(
     $input: UpdateTaskInput!
@@ -63,32 +114,6 @@ export const updateTask = /* GraphQL */ `
       id
       name
       deadline
-      category
-      description
-      completed
-      userID
-      User {
-        id
-        name
-        bio
-        createdAt
-        updatedAt
-        owner
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateMeeting = /* GraphQL */ `
-  mutation UpdateMeeting(
-    $input: UpdateMeetingInput!
-    $condition: ModelMeetingConditionInput
-  ) {
-    updateMeeting(input: $input, condition: $condition) {
-      id
-      name
-      meetingDate
       category
       description
       completed
@@ -132,32 +157,6 @@ export const deleteTask = /* GraphQL */ `
     }
   }
 `;
-export const deleteMeeting = /* GraphQL */ `
-  mutation DeleteMeeting(
-    $input: DeleteMeetingInput!
-    $condition: ModelMeetingConditionInput
-  ) {
-    deleteTask(input: $input, condition: $condition) {
-      id
-      name
-      meetingDate
-      category
-      description
-      completed
-      userID
-      User {
-        id
-        name
-        bio
-        createdAt
-        updatedAt
-        owner
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
 export const createUser = /* GraphQL */ `
   mutation CreateUser(
     $input: CreateUserInput!
@@ -174,6 +173,9 @@ export const createUser = /* GraphQL */ `
       }
       bio
       Tasks {
+        nextToken
+      }
+      Meetings {
         nextToken
       }
       createdAt
@@ -200,6 +202,9 @@ export const updateUser = /* GraphQL */ `
       Tasks {
         nextToken
       }
+      Meetings {
+        nextToken
+      }
       createdAt
       updatedAt
       owner
@@ -222,6 +227,9 @@ export const deleteUser = /* GraphQL */ `
       }
       bio
       Tasks {
+        nextToken
+      }
+      Meetings {
         nextToken
       }
       createdAt

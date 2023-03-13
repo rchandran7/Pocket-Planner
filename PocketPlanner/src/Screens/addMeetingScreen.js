@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Keyboard } from 'react-native'
 import { TextInput } from 'react-native'
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import {CheckBox} from "react-native-elements";
 import { API, graphqlOperation } from 'aws-amplify';
@@ -11,10 +10,11 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 export default function AddMeeting() {
 
     const [meetingName, setMeetingName] = useState('');
-    const [desc, setDesc] = useState('');
-    const [priority, setPriority] = useState();
+    const [description, setDescription] = useState('');
     const [meetingDate, setMeetingDate] = useState();
-    const [recurring, setRecurring] = useState();
+    const [isRecurring, setIsRecurring] = useState(false);
+    const [user, setUser] = useState(null);
+    const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
     const navigation = useNavigation();
 
   useEffect(() => {
@@ -41,23 +41,48 @@ export default function AddMeeting() {
             meetingName,
             description,
             meetingDate,
-            recurring,
+            isRecurring,
             category: '', // add a category property if needed
             //completed: false,
             userID: user.id,
           };
-          await API.graphql(graphqlOperation(createMeeting, { input: meetingDetails }));
+          if (isRecurring){
+            for(let i = 0; i < 10; i++){
+              const recurringMeetingDate = new Date(meetingDate.getTime() + i * 7 * 24 * 60 * 60 * 1000)
+              const recurringMeetingDetails = {
+                ...meetingDetails,
+                meetingDate: recurringMeetingDate,
+              };
+            try{
+              await API.graphql(graphqlOperation(createMeeting, { input: recurringMeetingDetails }));
+              console.log(`Created recurring meeting: ${recurringMeetingDetails.meetingName} on ${recurringMeetingDetails.meetingDate}`);
+              } catch (error) {
+                  console.log('Error creating recurring meeting:', error);
+                  Alert.alert('Error creating recurring meeting. Please try again later.');
+                  }
+            }
+          } else{
+            meetingDetails.meetingDate = meetingDate;
+            try{
+              await API.graphql(graphqlOperation(createMeeting, { input: meetingDetails }));
+              console.log(`Created meeting: ${meetingDetails.meetingName} on ${meetingDetails.meetingDate}`);
+            } catch (error) {
+              console.log('Error creating meeting:', error);
+              Alert.alert('Error creating meeting. Please try again later.');
+            }
+          }
           setMeetingName('');
           setDescription('');
           setMeetingDate(new Date());
-          console.log(title);
+          setIsRecurring(false);
+          console.log(meetingName);
           console.log(description);
           console.log(meetingDate);
-          console.log(recurring);
+          console.log(isRecurring);
           navigation.popToTop();
         } catch (error) {
-          console.log('Error adding task:', error);
-          Alert.alert('Error adding task. Please try again later.');
+          console.log('Error adding meeting:', error);
+          Alert.alert('Error adding meeting. Please try again later.');
         }
       };
       const handleConfirmDatePicker = (date) => {
@@ -92,8 +117,8 @@ export default function AddMeeting() {
                 <TextInput
                 style={styles.input}
                 placeholder="Enter Meeting Name"
-                value={Title}
-                onChangeText={(text) => setTitle(text)}
+                value={meetingName}
+                onChangeText={(text) => setMeetingName(text)}
                 />
             </View>
         <View style={styles.inputContainer}>
@@ -108,16 +133,16 @@ export default function AddMeeting() {
         <View style = {styles.inputContainer}>
             <CheckBox 
                 title = "Is This Meeting Recurring?"
-                value = {recurring}
+                value = {isRecurring}
                 style = {styles.input}
-                checked={true}
-                onPress={() => setRecurring(recurring)}
+                checked={isRecurring}
+                onPress={() => setIsRecurring(!isRecurring)}
             />
         </View>
     
         <TouchableOpacity onPress={() => setIsDatePickerVisible(true)} style={styles.button}>
-          <Text style={styles.buttonText}>Set Deadline</Text>
-          <Text style={styles.deadlineText}>{formatDate(deadline)}, {formatTime(deadline)}</Text>
+          <Text style={styles.buttonText}>Set Meeting Date</Text>
+          <Text style={styles.deadlineText}>{formatDate(meetingDate)}, {formatTime(meetingDate)}</Text>
         </TouchableOpacity>
     
         <DateTimePickerModal
@@ -127,8 +152,8 @@ export default function AddMeeting() {
           onCancel={handleCancelDatePicker}
           minimumDate={new Date()}
         />
-          <TouchableOpacity onPress={handleAddTask} style={styles.addButton}>
-            <Text style={styles.buttonText}>Add Task</Text>
+          <TouchableOpacity onPress={handleAddMeeting} style={styles.addButton}>
+            <Text style={styles.buttonText}>Add Meeting</Text>
           </TouchableOpacity>
       </View>
             
