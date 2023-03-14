@@ -13,7 +13,6 @@ export default function EditProfileScreen({ navigation, route }) {
   const [bio, setBio] = useState(user.bio);
   const [useImage, setImage] = useState(user.image);
   
-  console.log(useImage);
   useEffect(() => {
     navigation.setOptions({ headerTitle: 'Edit Profile' });
   }, []);
@@ -59,7 +58,6 @@ export default function EditProfileScreen({ navigation, route }) {
   
   const handleSaveProfile = async () => {
     try {
-      console.log(useImage);
       const updatedUser = await API.graphql(
         graphqlOperation(updateUser, {
           input: {

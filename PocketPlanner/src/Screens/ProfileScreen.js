@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { listUsers } from '../graphql/queries';
-import { useState } from "react";
+import { listUsers, tasksByUserID } from '../graphql/queries';
+import { useState, useEffect } from "react";
 import { API, graphqlOperation, Auth } from 'aws-amplify';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
@@ -9,36 +9,52 @@ import styled from "styled-components";
 
 export default function ProfileScreen({ navigation }) {
   const [user, setUser] = useState(null);
-
+  const [tasks, setTasks] = useState(null);
+  const [overdueTasks, setOverdueTasks] = useState(0);
+  const [completedTasks, setCompletedTasks] = useState(0);
+  const [inProgTasks, setInProgTasks] = useState(0);
+  
+  
+  
   useFocusEffect(
     React.useCallback(() => {
-      
       const fetchUsers = async () => {
         try {
-          const userData = await API.graphql(
-            graphqlOperation(
-              listUsers
-            )
-          )
+          const userData = await API.graphql(graphqlOperation(listUsers));
           setUser(userData.data.listUsers.items[0]); // assuming that you want to display the first user from the list
-          console.log(userData.data.listUsers.items[0]);
         } catch (e) {
           console.log(e);
         }
       }
       fetchUsers();
-      console.log(user);
     }, [])
-
   );
-
-  const handleSignOut = async () => {
-    try {
-      await Auth.signOut();
-    } catch (error) {
-      console.log('Error signing out: ', error);
+  
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const taskData = await API.graphql(graphqlOperation(tasksByUserID, { userID: user.id }));
+        const userTasks = taskData.data.tasksByUserID.items;
+        setTasks(userTasks);
+        const overdueTasks = userTasks.filter(task => {
+          const deadline = new Date(task.deadline);
+          return !task.completed && deadline < new Date();
+        });
+        const completedTasks = userTasks.filter(task => task.completed);
+        const inProgressTasks = userTasks.length - overdueTasks.length - completedTasks.length;
+        
+        // Set the number of overdue tasks in state
+        setOverdueTasks(overdueTasks.length);
+        setCompletedTasks(completedTasks.length);
+        setInProgTasks(inProgressTasks)
+      } catch (e) {
+        console.log(e);
+      }
     }
-  }
+    if (user) {
+      fetchTasks();
+    }
+  }, [user]);
 
   if (!user) {
     return <Text>Loading...</Text>;
@@ -58,15 +74,15 @@ export default function ProfileScreen({ navigation }) {
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.completeButton}>
-          <Text style={styles.stats}>25</Text>
+          <Text style={styles.stats}>{completedTasks}</Text>
           <Text style={styles.statDescription}>Tasks Completed</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.inProgButton}>
-          <Text style={styles.stats}>25</Text>
+          <Text style={styles.stats}>{inProgTasks}</Text>
           <Text style={styles.statDescription}>Tasks In Progress</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.overdueButton}>
-          <Text style={styles.stats}>25</Text>
+          <Text style={styles.stats}>{overdueTasks}</Text>
           <Text style={styles.statDescription}>Tasks Overdue</Text>
         </TouchableOpacity>
       </View>
