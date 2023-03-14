@@ -35,6 +35,10 @@ const AddTaskForm = () => {
     };
     fetchUser();
   }, []);
+  
+  const handleReturn = async () =>{
+    navigation.popToTop();
+  }
 
 
   const handleAddTask = async () => {
@@ -127,6 +131,9 @@ const AddTaskForm = () => {
         <TouchableOpacity onPress={handleAddTask} style={styles.addButton}>
           <Text style={styles.buttonText}>Add Task</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={handleReturn} style={styles.addButton}>
+            <Text style={styles.buttonText}>Return to Schedule</Text>
+          </TouchableOpacity>
     </View>
   );
   } 
@@ -170,6 +177,7 @@ const AddTaskForm = () => {
       backgroundColor: '#B0C4DE',
       borderRadius: 10,
       padding: 10,
+      marginTop: 10,
       alignItems: 'center',
       width: '100%',
     },

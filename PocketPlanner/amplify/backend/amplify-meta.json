@@ -1,15 +1,53 @@
 {
   "providers": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-pocketplanner-staging-220118-authRole",
-      "UnauthRoleArn": "arn:aws:iam::534870955440:role/amplify-pocketplanner-staging-220118-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::534870955440:role/amplify-pocketplanner-staging-220118-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-pocketplanner-staging-220118-deployment",
-      "UnauthRoleName": "amplify-pocketplanner-staging-220118-unauthRole",
-      "StackName": "amplify-pocketplanner-staging-220118",
-      "StackId": "arn:aws:cloudformation:us-east-1:534870955440:stack/amplify-pocketplanner-staging-220118/f627fcc0-9dc4-11ed-a1e9-0ef67d44b091",
-      "AmplifyAppId": "dvd586m28n89a"
+      "AuthRoleName": "amplify-pocketplanner-staging-191737-authRole",
+      "UnauthRoleArn": "arn:aws:iam::551436859354:role/amplify-pocketplanner-staging-191737-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::551436859354:role/amplify-pocketplanner-staging-191737-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-pocketplanner-staging-191737-deployment",
+      "UnauthRoleName": "amplify-pocketplanner-staging-191737-unauthRole",
+      "StackName": "amplify-pocketplanner-staging-191737",
+      "StackId": "arn:aws:cloudformation:us-east-2:551436859354:stack/amplify-pocketplanner-staging-191737/c1f61660-a0d2-11ed-abd5-0a3642c12c44",
+      "AmplifyAppId": "d3pge5lvt8oyzf"
+    }
+  },
+  "api": {
+    "pocketplanner": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "PocketPlanner"
+        }
+      ],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ],
+          "defaultAuthentication": {
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authPocketPlanner"
+            }
+          }
+        },
+        "GraphQLAPIIdOutput": "u3xlegwvrvgzdpmc2vmk5a4aq4",
+        "GraphQLAPIEndpointOutput": "https://lspv52fblrdandhfcobabjnbo4.appsync-api.us-east-2.amazonaws.com/graphql"
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync",
+      "lastPushTimeStamp": "2023-03-12T03:18:21.733Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-pocketplanner-staging-191737-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apipocketplanner"
+      },
+      "lastPushDirHash": "K2m06yo5/HdYuKsU2f/ES5sBoao="
     }
   },
   "auth": {
@@ -22,12 +60,12 @@
           "SMS"
         ],
         "passwordProtectionSettings": {
-          "passwordPolicyMinLength": 7,
+          "passwordPolicyMinLength": 6,
           "passwordPolicyCharacters": []
         },
         "signupAttributes": [
           "EMAIL",
-          "PREFERRED_USERNAME"
+          "NAME"
         ],
         "socialProviders": [],
         "usernameAttributes": [],
@@ -38,18 +76,34 @@
       "providerPlugin": "awscloudformation",
       "service": "Cognito",
       "output": {
-        "UserPoolId": "us-east-1_ryT0phsTM",
-        "AppClientIDWeb": "91992qn8cff4oae46um75b8um",
-        "AppClientID": "6hfjt0rokuljml7qo54ndlo1a4",
-        "IdentityPoolId": "us-east-1:b4c1994b-903c-4b3e-a1a5-d1a1be64eee5",
-        "UserPoolArn": "arn:aws:cognito-idp:us-east-1:534870955440:userpool/us-east-1_ryT0phsTM",
+        "UserPoolId": "us-east-2_NITE9zfcs",
+        "AppClientIDWeb": "4akhaht511q9js8gur3h9gf2ss",
+        "AppClientID": "2k64f53n37p02m9eav7j4bsd4q",
+        "IdentityPoolId": "us-east-2:7404632e-f30e-42fe-9c33-68ef1e09d837",
+        "UserPoolArn": "arn:aws:cognito-idp:us-east-2:551436859354:userpool/us-east-2_NITE9zfcs",
         "IdentityPoolName": "testAuthIdentityPool__staging",
         "UserPoolName": "PocketPlanner"
       },
-      "lastPushTimeStamp": "2023-01-26T22:19:12.942Z",
+      "lastPushTimeStamp": "2023-03-12T03:18:21.740Z",
       "providerMetadata": {
-        "s3TemplateURL": "https://s3.amazonaws.com/amplify-pocketplanner-staging-220118-deployment/amplify-cfn-templates/auth/PocketPlanner-cloudformation-template.json",
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-pocketplanner-staging-191737-deployment/amplify-cfn-templates/auth/PocketPlanner-cloudformation-template.json",
         "logicalId": "authPocketPlanner"
+      }
+    }
+  },
+  "storage": {
+    "s3pocketplannerstorage5f75b3c5": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3",
+      "output": {
+        "BucketName": "pocketplanner-storage-5f75b3c5191737-staging",
+        "Region": "us-east-2"
+      },
+      "lastPushTimeStamp": "2023-03-12T03:18:23.502Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-pocketplanner-staging-191737-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
+        "logicalId": "storages3pocketplannerstorage5f75b3c5"
       }
     }
   }

@@ -1,6 +1,75 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateMeeting = /* GraphQL */ `
+  subscription OnCreateMeeting($filter: ModelSubscriptionMeetingFilterInput) {
+    onCreateMeeting(filter: $filter) {
+      id
+      name
+      description
+      meetingDate
+      isRecurring
+      userID
+      User {
+        id
+        name
+        bio
+        createdAt
+        updatedAt
+        owner
+      }
+      completed
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateMeeting = /* GraphQL */ `
+  subscription OnUpdateMeeting($filter: ModelSubscriptionMeetingFilterInput) {
+    onUpdateMeeting(filter: $filter) {
+      id
+      name
+      description
+      meetingDate
+      isRecurring
+      userID
+      User {
+        id
+        name
+        bio
+        createdAt
+        updatedAt
+        owner
+      }
+      completed
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteMeeting = /* GraphQL */ `
+  subscription OnDeleteMeeting($filter: ModelSubscriptionMeetingFilterInput) {
+    onDeleteMeeting(filter: $filter) {
+      id
+      name
+      description
+      meetingDate
+      isRecurring
+      userID
+      User {
+        id
+        name
+        bio
+        createdAt
+        updatedAt
+        owner
+      }
+      completed
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateTask = /* GraphQL */ `
   subscription OnCreateTask($filter: ModelSubscriptionTaskFilterInput) {
     onCreateTask(filter: $filter) {
@@ -88,6 +157,9 @@ export const onCreateUser = /* GraphQL */ `
       Tasks {
         nextToken
       }
+      Meetings {
+        nextToken
+      }
       createdAt
       updatedAt
       owner
@@ -112,6 +184,9 @@ export const onUpdateUser = /* GraphQL */ `
       Tasks {
         nextToken
       }
+      Meetings {
+        nextToken
+      }
       createdAt
       updatedAt
       owner
@@ -134,6 +209,9 @@ export const onDeleteUser = /* GraphQL */ `
       }
       bio
       Tasks {
+        nextToken
+      }
+      Meetings {
         nextToken
       }
       createdAt

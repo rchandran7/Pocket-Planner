@@ -1,6 +1,81 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getMeeting = /* GraphQL */ `
+  query GetMeeting($id: ID!) {
+    getMeeting(id: $id) {
+      id
+      name
+      description
+      meetingDate
+      isRecurring
+      userID
+      User {
+        id
+        name
+        bio
+        createdAt
+        updatedAt
+        owner
+      }
+      completed
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listMeetings = /* GraphQL */ `
+  query ListMeetings(
+    $filter: ModelMeetingFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMeetings(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        description
+        meetingDate
+        isRecurring
+        userID
+        completed
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const meetingsByUserID = /* GraphQL */ `
+  query MeetingsByUserID(
+    $userID: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelMeetingFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    meetingsByUserID(
+      userID: $userID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        description
+        meetingDate
+        isRecurring
+        userID
+        completed
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getTask = /* GraphQL */ `
   query GetTask($id: ID!) {
     getTask(id: $id) {
@@ -91,6 +166,9 @@ export const getUser = /* GraphQL */ `
       Tasks {
         nextToken
       }
+      Meetings {
+        nextToken
+      }
       createdAt
       updatedAt
       owner
@@ -108,12 +186,6 @@ export const listUsers = /* GraphQL */ `
         id
         name
         bio
-        image {
-          bucket
-          region
-          key
-          localUri
-        }
         createdAt
         updatedAt
         owner

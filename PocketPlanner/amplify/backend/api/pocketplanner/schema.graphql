@@ -1,0 +1,38 @@
+type Meeting @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  name: String
+  description: String
+  meetingDate: AWSDateTime
+  isRecurring: Boolean
+  userID: ID! @index(name: "byUser")
+  User: User @belongsTo(fields: ["userID"])
+  completed: Boolean
+}
+
+type Task @model @auth(rules: [{allow: private}]) {
+  id: ID!
+  name: String
+  deadline: AWSDateTime
+  category: String
+  description: String
+  completed: Boolean
+  userID: ID! @index(name: "byUser")
+  User: User @belongsTo(fields: ["userID"])
+}
+
+type S3Object {
+  bucket: String!
+  region: String!
+  key: String!
+  localUri: String
+}
+
+type User @model @auth(rules: [{allow: groups, groups: ["Admin"]}, {allow: owner}]) {
+  id: ID!
+  name: String!
+  image: S3Object
+  bio: String
+  Tasks: [Task] @hasMany(indexName: "byUser", fields: ["id"])
+  Meetings: [Meeting] @hasMany(indexName: "byUser", fields: ["id"])
+}
+ 

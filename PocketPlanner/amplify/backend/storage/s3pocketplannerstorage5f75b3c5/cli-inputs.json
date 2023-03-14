@@ -1,0 +1,12 @@
+{
+  "resourceName": "s3pocketplannerstorage5f75b3c5",
+  "bucketName": "pocketplanner-storage-5f75b3c5",
+  "policyUUID": "451d4525",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ]
+}
