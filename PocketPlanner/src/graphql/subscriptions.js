@@ -1,6 +1,147 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateGroup = /* GraphQL */ `
+  subscription OnCreateGroup($filter: ModelSubscriptionGroupFilterInput) {
+    onCreateGroup(filter: $filter) {
+      id
+      image {
+        bucket
+        region
+        key
+        localUri
+      }
+      Tasks {
+        nextToken
+      }
+      TimeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      users {
+        nextToken
+      }
+      createdAt
+      updatedAt
+      groupTimeFrameId
+    }
+  }
+`;
+export const onUpdateGroup = /* GraphQL */ `
+  subscription OnUpdateGroup($filter: ModelSubscriptionGroupFilterInput) {
+    onUpdateGroup(filter: $filter) {
+      id
+      image {
+        bucket
+        region
+        key
+        localUri
+      }
+      Tasks {
+        nextToken
+      }
+      TimeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      users {
+        nextToken
+      }
+      createdAt
+      updatedAt
+      groupTimeFrameId
+    }
+  }
+`;
+export const onDeleteGroup = /* GraphQL */ `
+  subscription OnDeleteGroup($filter: ModelSubscriptionGroupFilterInput) {
+    onDeleteGroup(filter: $filter) {
+      id
+      image {
+        bucket
+        region
+        key
+        localUri
+      }
+      Tasks {
+        nextToken
+      }
+      TimeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      users {
+        nextToken
+      }
+      createdAt
+      updatedAt
+      groupTimeFrameId
+    }
+  }
+`;
+export const onCreateTimeFrame = /* GraphQL */ `
+  subscription OnCreateTimeFrame(
+    $filter: ModelSubscriptionTimeFrameFilterInput
+  ) {
+    onCreateTimeFrame(filter: $filter) {
+      id
+      name
+      startDate
+      endDate
+      Meetings {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateTimeFrame = /* GraphQL */ `
+  subscription OnUpdateTimeFrame(
+    $filter: ModelSubscriptionTimeFrameFilterInput
+  ) {
+    onUpdateTimeFrame(filter: $filter) {
+      id
+      name
+      startDate
+      endDate
+      Meetings {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteTimeFrame = /* GraphQL */ `
+  subscription OnDeleteTimeFrame(
+    $filter: ModelSubscriptionTimeFrameFilterInput
+  ) {
+    onDeleteTimeFrame(filter: $filter) {
+      id
+      name
+      startDate
+      endDate
+      Meetings {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateMeeting = /* GraphQL */ `
   subscription OnCreateMeeting($filter: ModelSubscriptionMeetingFilterInput) {
     onCreateMeeting(filter: $filter) {
@@ -19,8 +160,20 @@ export const onCreateMeeting = /* GraphQL */ `
         owner
       }
       completed
+      TimeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      timeframes {
+        nextToken
+      }
       createdAt
       updatedAt
+      meetingTimeFrameId
     }
   }
 `;
@@ -42,8 +195,20 @@ export const onUpdateMeeting = /* GraphQL */ `
         owner
       }
       completed
+      TimeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      timeframes {
+        nextToken
+      }
       createdAt
       updatedAt
+      meetingTimeFrameId
     }
   }
 `;
@@ -65,8 +230,20 @@ export const onDeleteMeeting = /* GraphQL */ `
         owner
       }
       completed
+      TimeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      timeframes {
+        nextToken
+      }
       createdAt
       updatedAt
+      meetingTimeFrameId
     }
   }
 `;
@@ -88,6 +265,7 @@ export const onCreateTask = /* GraphQL */ `
         updatedAt
         owner
       }
+      groupID
       createdAt
       updatedAt
     }
@@ -111,6 +289,7 @@ export const onUpdateTask = /* GraphQL */ `
         updatedAt
         owner
       }
+      groupID
       createdAt
       updatedAt
     }
@@ -134,6 +313,7 @@ export const onDeleteTask = /* GraphQL */ `
         updatedAt
         owner
       }
+      groupID
       createdAt
       updatedAt
     }
@@ -158,6 +338,9 @@ export const onCreateUser = /* GraphQL */ `
         nextToken
       }
       Meetings {
+        nextToken
+      }
+      Groups {
         nextToken
       }
       createdAt
@@ -187,6 +370,9 @@ export const onUpdateUser = /* GraphQL */ `
       Meetings {
         nextToken
       }
+      Groups {
+        nextToken
+      }
       createdAt
       updatedAt
       owner
@@ -214,9 +400,198 @@ export const onDeleteUser = /* GraphQL */ `
       Meetings {
         nextToken
       }
+      Groups {
+        nextToken
+      }
       createdAt
       updatedAt
       owner
+    }
+  }
+`;
+export const onCreateUserGroup = /* GraphQL */ `
+  subscription OnCreateUserGroup(
+    $filter: ModelSubscriptionUserGroupFilterInput
+    $owner: String
+  ) {
+    onCreateUserGroup(filter: $filter, owner: $owner) {
+      id
+      groupId
+      userId
+      group {
+        id
+        createdAt
+        updatedAt
+        groupTimeFrameId
+      }
+      user {
+        id
+        name
+        bio
+        createdAt
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateUserGroup = /* GraphQL */ `
+  subscription OnUpdateUserGroup(
+    $filter: ModelSubscriptionUserGroupFilterInput
+    $owner: String
+  ) {
+    onUpdateUserGroup(filter: $filter, owner: $owner) {
+      id
+      groupId
+      userId
+      group {
+        id
+        createdAt
+        updatedAt
+        groupTimeFrameId
+      }
+      user {
+        id
+        name
+        bio
+        createdAt
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteUserGroup = /* GraphQL */ `
+  subscription OnDeleteUserGroup(
+    $filter: ModelSubscriptionUserGroupFilterInput
+    $owner: String
+  ) {
+    onDeleteUserGroup(filter: $filter, owner: $owner) {
+      id
+      groupId
+      userId
+      group {
+        id
+        createdAt
+        updatedAt
+        groupTimeFrameId
+      }
+      user {
+        id
+        name
+        bio
+        createdAt
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onCreateTimeFrameMeeting = /* GraphQL */ `
+  subscription OnCreateTimeFrameMeeting(
+    $filter: ModelSubscriptionTimeFrameMeetingFilterInput
+  ) {
+    onCreateTimeFrameMeeting(filter: $filter) {
+      id
+      timeFrameId
+      meetingId
+      timeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      meeting {
+        id
+        name
+        description
+        meetingDate
+        isRecurring
+        userID
+        completed
+        createdAt
+        updatedAt
+        meetingTimeFrameId
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateTimeFrameMeeting = /* GraphQL */ `
+  subscription OnUpdateTimeFrameMeeting(
+    $filter: ModelSubscriptionTimeFrameMeetingFilterInput
+  ) {
+    onUpdateTimeFrameMeeting(filter: $filter) {
+      id
+      timeFrameId
+      meetingId
+      timeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      meeting {
+        id
+        name
+        description
+        meetingDate
+        isRecurring
+        userID
+        completed
+        createdAt
+        updatedAt
+        meetingTimeFrameId
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteTimeFrameMeeting = /* GraphQL */ `
+  subscription OnDeleteTimeFrameMeeting(
+    $filter: ModelSubscriptionTimeFrameMeetingFilterInput
+  ) {
+    onDeleteTimeFrameMeeting(filter: $filter) {
+      id
+      timeFrameId
+      meetingId
+      timeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      meeting {
+        id
+        name
+        description
+        meetingDate
+        isRecurring
+        userID
+        completed
+        createdAt
+        updatedAt
+        meetingTimeFrameId
+      }
+      createdAt
+      updatedAt
     }
   }
 `;

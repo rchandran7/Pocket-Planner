@@ -1,6 +1,87 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getGroup = /* GraphQL */ `
+  query GetGroup($id: ID!) {
+    getGroup(id: $id) {
+      id
+      image {
+        bucket
+        region
+        key
+        localUri
+      }
+      Tasks {
+        nextToken
+      }
+      TimeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      users {
+        nextToken
+      }
+      createdAt
+      updatedAt
+      groupTimeFrameId
+    }
+  }
+`;
+export const listGroups = /* GraphQL */ `
+  query ListGroups(
+    $filter: ModelGroupFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listGroups(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        createdAt
+        updatedAt
+        groupTimeFrameId
+      }
+      nextToken
+    }
+  }
+`;
+export const getTimeFrame = /* GraphQL */ `
+  query GetTimeFrame($id: ID!) {
+    getTimeFrame(id: $id) {
+      id
+      name
+      startDate
+      endDate
+      Meetings {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listTimeFrames = /* GraphQL */ `
+  query ListTimeFrames(
+    $filter: ModelTimeFrameFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTimeFrames(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getMeeting = /* GraphQL */ `
   query GetMeeting($id: ID!) {
     getMeeting(id: $id) {
@@ -19,8 +100,20 @@ export const getMeeting = /* GraphQL */ `
         owner
       }
       completed
+      TimeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      timeframes {
+        nextToken
+      }
       createdAt
       updatedAt
+      meetingTimeFrameId
     }
   }
 `;
@@ -41,6 +134,7 @@ export const listMeetings = /* GraphQL */ `
         completed
         createdAt
         updatedAt
+        meetingTimeFrameId
       }
       nextToken
     }
@@ -71,6 +165,7 @@ export const meetingsByUserID = /* GraphQL */ `
         completed
         createdAt
         updatedAt
+        meetingTimeFrameId
       }
       nextToken
     }
@@ -94,6 +189,7 @@ export const getTask = /* GraphQL */ `
         updatedAt
         owner
       }
+      groupID
       createdAt
       updatedAt
     }
@@ -114,6 +210,7 @@ export const listTasks = /* GraphQL */ `
         description
         completed
         userID
+        groupID
         createdAt
         updatedAt
       }
@@ -144,6 +241,38 @@ export const tasksByUserID = /* GraphQL */ `
         description
         completed
         userID
+        groupID
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const tasksByGroupID = /* GraphQL */ `
+  query TasksByGroupID(
+    $groupID: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelTaskFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    tasksByGroupID(
+      groupID: $groupID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        deadline
+        category
+        description
+        completed
+        userID
+        groupID
         createdAt
         updatedAt
       }
@@ -169,6 +298,9 @@ export const getUser = /* GraphQL */ `
       Meetings {
         nextToken
       }
+      Groups {
+        nextToken
+      }
       createdAt
       updatedAt
       owner
@@ -185,10 +317,220 @@ export const listUsers = /* GraphQL */ `
       items {
         id
         name
+        image {
+          bucket
+          region
+          key
+          localUri
+        }
         bio
         createdAt
         updatedAt
         owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getUserGroup = /* GraphQL */ `
+  query GetUserGroup($id: ID!) {
+    getUserGroup(id: $id) {
+      id
+      groupId
+      userId
+      group {
+        id
+        createdAt
+        updatedAt
+        groupTimeFrameId
+      }
+      user {
+        id
+        name
+        bio
+        createdAt
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listUserGroups = /* GraphQL */ `
+  query ListUserGroups(
+    $filter: ModelUserGroupFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUserGroups(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        groupId
+        userId
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const userGroupsByGroupId = /* GraphQL */ `
+  query UserGroupsByGroupId(
+    $groupId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserGroupFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    userGroupsByGroupId(
+      groupId: $groupId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        groupId
+        userId
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const userGroupsByUserId = /* GraphQL */ `
+  query UserGroupsByUserId(
+    $userId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserGroupFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    userGroupsByUserId(
+      userId: $userId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        groupId
+        userId
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getTimeFrameMeeting = /* GraphQL */ `
+  query GetTimeFrameMeeting($id: ID!) {
+    getTimeFrameMeeting(id: $id) {
+      id
+      timeFrameId
+      meetingId
+      timeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      meeting {
+        id
+        name
+        description
+        meetingDate
+        isRecurring
+        userID
+        completed
+        createdAt
+        updatedAt
+        meetingTimeFrameId
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listTimeFrameMeetings = /* GraphQL */ `
+  query ListTimeFrameMeetings(
+    $filter: ModelTimeFrameMeetingFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTimeFrameMeetings(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        timeFrameId
+        meetingId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const timeFrameMeetingsByTimeFrameId = /* GraphQL */ `
+  query TimeFrameMeetingsByTimeFrameId(
+    $timeFrameId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelTimeFrameMeetingFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    timeFrameMeetingsByTimeFrameId(
+      timeFrameId: $timeFrameId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        timeFrameId
+        meetingId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const timeFrameMeetingsByMeetingId = /* GraphQL */ `
+  query TimeFrameMeetingsByMeetingId(
+    $meetingId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelTimeFrameMeetingFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    timeFrameMeetingsByMeetingId(
+      meetingId: $meetingId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        timeFrameId
+        meetingId
+        createdAt
+        updatedAt
       }
       nextToken
     }
