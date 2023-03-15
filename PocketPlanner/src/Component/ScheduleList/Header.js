@@ -72,6 +72,7 @@ const ComponentContainer = styled.View`
 
 const HeaderText = styled.Text`
   color: black;
+  font-weight: bold;
   font-size: 30px;
   margin-top: 70px
 `;

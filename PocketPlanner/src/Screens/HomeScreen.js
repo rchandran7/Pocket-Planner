@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import Header from '../Component/ScheduleList/Header';
 import AddInput from '../Component/ScheduleList/AddInput';
 import CalendarView from '../Component/ScheduleList/Calendar';
+import {CheckBox} from "react-native-elements";
 
 const TaskList = () => {
   const [user, setUser] = useState(null);
@@ -198,11 +199,11 @@ const TaskList = () => {
         .map((task, index) => (
 
           <TouchableOpacity key={task.id} onPress={() => handleConfirmCompleted(task)} 
-          style={[
-            styles.taskItem,
-            index === 0 && { marginTop: 40 },
-            task.completed ? styles.taskItemCompleted : styles.taskItem,
-          ]}
+            style={[
+              styles.taskItem,
+              index === 0 && { marginTop: 40 },
+              task.completed ? styles.taskItemCompleted : styles.taskItem,
+            ]}
           >
 
               <View style={{ flex: 1 }}>
@@ -220,11 +221,15 @@ const TaskList = () => {
               </View>
 
             )}
-
+            <CheckBox
+              value={task.completed}
+              checked={task.completed}
+              style={styles.checkbox}
+              onPress={() => handleConfirmCompleted(task)}
+            />
             <TouchableOpacity onPress={() => handleDeleteTask(task)} style={{ marginLeft: 10 }}>
               <Icon name="times" color="red" size={20} />
             </TouchableOpacity>
-
           </TouchableOpacity>
 
         ))}
@@ -298,6 +303,13 @@ const styles = StyleSheet.create({
     paddingRight: 8,
     flex: 1,
   },
+  checkbox: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    padding: 10,
+    width: '100%',
+  }
 });
 const ComponentContainer = styled.View`
   align-items: center;
