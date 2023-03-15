@@ -11,7 +11,6 @@ import {
 import { API, graphqlOperation } from 'aws-amplify';
 import { createTask } from '../graphql/mutations';
 import { getUser, listUsers } from '../graphql/queries';
-import CalendarPicker from 'react-native-calendar-picker';
 import { useNavigation } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 const AddTaskForm = () => {
