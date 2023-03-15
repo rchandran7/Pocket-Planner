@@ -198,7 +198,7 @@ const TaskList = () => {
         .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
         .map((task, index) => (
 
-          <TouchableOpacity key={task.id} onPress={() => handleConfirmCompleted(task)} 
+          <TouchableOpacity key={task.id} onPress={() => handleConfirmCompleted(task)}
             style={[
               styles.taskItem,
               index === 0 && { marginTop: 40 },
@@ -227,7 +227,7 @@ const TaskList = () => {
               style={styles.checkbox}
               onPress={() => handleConfirmCompleted(task)}
             />
-            <TouchableOpacity onPress={() => handleDeleteTask(task)} style={{ marginLeft: 10 }}>
+            <TouchableOpacity onPress={() => handleDeleteTask(task)} style={{}}>
               <Icon name="times" color="red" size={20} />
             </TouchableOpacity>
           </TouchableOpacity>
@@ -328,6 +328,5 @@ const EmptyText = styled.Text`
   margin-top: 30px;
   font-size: 30px;
 `;
-
 
 export default TaskList;
