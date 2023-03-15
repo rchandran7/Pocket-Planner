@@ -1,6 +1,159 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createGroup = /* GraphQL */ `
+  mutation CreateGroup(
+    $input: CreateGroupInput!
+    $condition: ModelGroupConditionInput
+  ) {
+    createGroup(input: $input, condition: $condition) {
+      id
+      image {
+        bucket
+        region
+        key
+        localUri
+      }
+      Tasks {
+        nextToken
+      }
+      TimeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      users {
+        nextToken
+      }
+      createdAt
+      updatedAt
+      groupTimeFrameId
+    }
+  }
+`;
+export const updateGroup = /* GraphQL */ `
+  mutation UpdateGroup(
+    $input: UpdateGroupInput!
+    $condition: ModelGroupConditionInput
+  ) {
+    updateGroup(input: $input, condition: $condition) {
+      id
+      image {
+        bucket
+        region
+        key
+        localUri
+      }
+      Tasks {
+        nextToken
+      }
+      TimeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      users {
+        nextToken
+      }
+      createdAt
+      updatedAt
+      groupTimeFrameId
+    }
+  }
+`;
+export const deleteGroup = /* GraphQL */ `
+  mutation DeleteGroup(
+    $input: DeleteGroupInput!
+    $condition: ModelGroupConditionInput
+  ) {
+    deleteGroup(input: $input, condition: $condition) {
+      id
+      image {
+        bucket
+        region
+        key
+        localUri
+      }
+      Tasks {
+        nextToken
+      }
+      TimeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      users {
+        nextToken
+      }
+      createdAt
+      updatedAt
+      groupTimeFrameId
+    }
+  }
+`;
+export const createTimeFrame = /* GraphQL */ `
+  mutation CreateTimeFrame(
+    $input: CreateTimeFrameInput!
+    $condition: ModelTimeFrameConditionInput
+  ) {
+    createTimeFrame(input: $input, condition: $condition) {
+      id
+      name
+      startDate
+      endDate
+      Meetings {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateTimeFrame = /* GraphQL */ `
+  mutation UpdateTimeFrame(
+    $input: UpdateTimeFrameInput!
+    $condition: ModelTimeFrameConditionInput
+  ) {
+    updateTimeFrame(input: $input, condition: $condition) {
+      id
+      name
+      startDate
+      endDate
+      Meetings {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteTimeFrame = /* GraphQL */ `
+  mutation DeleteTimeFrame(
+    $input: DeleteTimeFrameInput!
+    $condition: ModelTimeFrameConditionInput
+  ) {
+    deleteTimeFrame(input: $input, condition: $condition) {
+      id
+      name
+      startDate
+      endDate
+      Meetings {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createMeeting = /* GraphQL */ `
   mutation CreateMeeting(
     $input: CreateMeetingInput!
@@ -22,8 +175,20 @@ export const createMeeting = /* GraphQL */ `
         owner
       }
       completed
+      TimeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      timeframes {
+        nextToken
+      }
       createdAt
       updatedAt
+      meetingTimeFrameId
     }
   }
 `;
@@ -48,8 +213,20 @@ export const updateMeeting = /* GraphQL */ `
         owner
       }
       completed
+      TimeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      timeframes {
+        nextToken
+      }
       createdAt
       updatedAt
+      meetingTimeFrameId
     }
   }
 `;
@@ -74,8 +251,20 @@ export const deleteMeeting = /* GraphQL */ `
         owner
       }
       completed
+      TimeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      timeframes {
+        nextToken
+      }
       createdAt
       updatedAt
+      meetingTimeFrameId
     }
   }
 `;
@@ -100,6 +289,7 @@ export const createTask = /* GraphQL */ `
         updatedAt
         owner
       }
+      groupID
       createdAt
       updatedAt
     }
@@ -126,6 +316,7 @@ export const updateTask = /* GraphQL */ `
         updatedAt
         owner
       }
+      groupID
       createdAt
       updatedAt
     }
@@ -152,6 +343,7 @@ export const deleteTask = /* GraphQL */ `
         updatedAt
         owner
       }
+      groupID
       createdAt
       updatedAt
     }
@@ -176,6 +368,9 @@ export const createUser = /* GraphQL */ `
         nextToken
       }
       Meetings {
+        nextToken
+      }
+      Groups {
         nextToken
       }
       createdAt
@@ -205,6 +400,9 @@ export const updateUser = /* GraphQL */ `
       Meetings {
         nextToken
       }
+      Groups {
+        nextToken
+      }
       createdAt
       updatedAt
       owner
@@ -232,9 +430,201 @@ export const deleteUser = /* GraphQL */ `
       Meetings {
         nextToken
       }
+      Groups {
+        nextToken
+      }
       createdAt
       updatedAt
       owner
+    }
+  }
+`;
+export const createUserGroup = /* GraphQL */ `
+  mutation CreateUserGroup(
+    $input: CreateUserGroupInput!
+    $condition: ModelUserGroupConditionInput
+  ) {
+    createUserGroup(input: $input, condition: $condition) {
+      id
+      groupId
+      userId
+      group {
+        id
+        createdAt
+        updatedAt
+        groupTimeFrameId
+      }
+      user {
+        id
+        name
+        bio
+        createdAt
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const updateUserGroup = /* GraphQL */ `
+  mutation UpdateUserGroup(
+    $input: UpdateUserGroupInput!
+    $condition: ModelUserGroupConditionInput
+  ) {
+    updateUserGroup(input: $input, condition: $condition) {
+      id
+      groupId
+      userId
+      group {
+        id
+        createdAt
+        updatedAt
+        groupTimeFrameId
+      }
+      user {
+        id
+        name
+        bio
+        createdAt
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const deleteUserGroup = /* GraphQL */ `
+  mutation DeleteUserGroup(
+    $input: DeleteUserGroupInput!
+    $condition: ModelUserGroupConditionInput
+  ) {
+    deleteUserGroup(input: $input, condition: $condition) {
+      id
+      groupId
+      userId
+      group {
+        id
+        createdAt
+        updatedAt
+        groupTimeFrameId
+      }
+      user {
+        id
+        name
+        bio
+        createdAt
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+    }
+  }
+`;
+export const createTimeFrameMeeting = /* GraphQL */ `
+  mutation CreateTimeFrameMeeting(
+    $input: CreateTimeFrameMeetingInput!
+    $condition: ModelTimeFrameMeetingConditionInput
+  ) {
+    createTimeFrameMeeting(input: $input, condition: $condition) {
+      id
+      timeFrameId
+      meetingId
+      timeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      meeting {
+        id
+        name
+        description
+        meetingDate
+        isRecurring
+        userID
+        completed
+        createdAt
+        updatedAt
+        meetingTimeFrameId
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateTimeFrameMeeting = /* GraphQL */ `
+  mutation UpdateTimeFrameMeeting(
+    $input: UpdateTimeFrameMeetingInput!
+    $condition: ModelTimeFrameMeetingConditionInput
+  ) {
+    updateTimeFrameMeeting(input: $input, condition: $condition) {
+      id
+      timeFrameId
+      meetingId
+      timeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      meeting {
+        id
+        name
+        description
+        meetingDate
+        isRecurring
+        userID
+        completed
+        createdAt
+        updatedAt
+        meetingTimeFrameId
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteTimeFrameMeeting = /* GraphQL */ `
+  mutation DeleteTimeFrameMeeting(
+    $input: DeleteTimeFrameMeetingInput!
+    $condition: ModelTimeFrameMeetingConditionInput
+  ) {
+    deleteTimeFrameMeeting(input: $input, condition: $condition) {
+      id
+      timeFrameId
+      meetingId
+      timeFrame {
+        id
+        name
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      meeting {
+        id
+        name
+        description
+        meetingDate
+        isRecurring
+        userID
+        completed
+        createdAt
+        updatedAt
+        meetingTimeFrameId
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
