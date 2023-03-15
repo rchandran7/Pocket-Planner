@@ -13,6 +13,7 @@ import {CheckBox} from "react-native-elements";
 const TaskList = () => {
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
+  const [meetings, setMeetings] = useState([]);
   const [selectedOption, setSelectedOption] = useState("All");
   const [cutoffDate, setCutoffDate] = useState(() => {
     const date = new Date();
@@ -77,6 +78,22 @@ const TaskList = () => {
     }
   }, [user, tasks]);
 
+  useEffect(() => {
+    const fetchMeetings = async () => {
+      try {
+        const meetingData = await API.graphql(graphqlOperation(meetingsByUserID, { userID: user.id }));
+        const meetings = meetingData.data.meetingsByUserID.items;
+        setTasks(meetings);
+      } catch (err) {
+        console.log('Error fetching meetings:', err);
+      }
+    };
+  
+    if (user) {
+      fetchMeetings();
+    }
+  }, [user, meetings]);
+
   const handleDeleteTask = (task) => {
     Alert.alert(
       'Confirm Delete',
@@ -95,6 +112,30 @@ const TaskList = () => {
               setTasks(tasks.filter((t) => t !== task));
             } catch (error) {
               console.log('Error deleting task:', error);
+            }
+          },
+        },
+      ]
+    );
+  };
+  const handleDeleteMeeting = (task) => {
+    Alert.alert(
+      'Confirm Delete',
+      `Are you sure you want to delete the meeting? "${meeting.name}"?`,
+      [
+        {
+          text: 'Cancel',
+          style: 'default',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await API.graphql(graphqlOperation(deleteMeeting, { input: { id: meeting.id } }));
+              setMeetings(meetings.filter((t) => t !== meeting));
+            } catch (error) {
+              console.log('Error deleting meeting:', error);
             }
           },
         },
@@ -135,6 +176,7 @@ const TaskList = () => {
     );
   }
   
+  
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const options = {
@@ -152,7 +194,7 @@ const TaskList = () => {
     return `${hours}:${minutes} ${ampm}`;
   };
 
-  if (tasks.length === 0) {
+  if (tasks.length === 0 && meetings.length === 0) {
     return (
       <ComponentContainer>
         <EmptyImage
