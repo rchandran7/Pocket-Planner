@@ -13,7 +13,6 @@ export default function AddMeeting() {
     const [description, setDescription] = useState('');
     const [meetingDate, setMeetingDate] = useState();
     const [isRecurring, setIsRecurring] = useState(false);
-    //const [multiDay, setMultiDay] = useState(new Array().fill(false));
     const [weekdays, setWeekdays] = useState([false, false, false, false, false, false, false]);
     const [user, setUser] = useState(null);
     const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
@@ -160,7 +159,6 @@ export default function AddMeeting() {
         <View style = {styles.inputContainer}>
             <CheckBox 
                 title = "Monday"
-                //value = {false}
                 style = {styles.input}
                 checked = {weekdays[0]}
                 onPress={() => {
@@ -171,7 +169,6 @@ export default function AddMeeting() {
             />
             <CheckBox 
                 title = "Tuesday"
-                //value = {weekdays[1]}
                 style = {styles.input}
                 checked = {weekdays[1]}
                 onPress={() => {
@@ -182,7 +179,6 @@ export default function AddMeeting() {
             />
             <CheckBox 
                 title = "Wednesday"
-                //value = {weekdays[2]}
                 style = {styles.input}
                 checked = {weekdays[2]}
                 onPress={() => {
@@ -193,7 +189,6 @@ export default function AddMeeting() {
             />
             <CheckBox 
                 title = "Thursday"
-                //value = {weekdays[3]}
                 style = {styles.input}
                 checked = {weekdays[3]}
                 onPress={() => {
@@ -204,7 +199,6 @@ export default function AddMeeting() {
             />
             <CheckBox 
                 title = "Friday"
-                //value = {weekdays[4]}
                 style = {styles.input}
                 checked = {weekdays[4]}
                 onPress={() => {
@@ -215,7 +209,6 @@ export default function AddMeeting() {
             />
             <CheckBox 
                 title = "Saturday"
-                //value = {weekdays[5]}
                 style = {styles.input}
                 checked = {weekdays[5]}
                 onPress={() => {
@@ -226,7 +219,6 @@ export default function AddMeeting() {
             />
             <CheckBox 
                 title = "Sunday"
-                //value = {weekdays[6]}
                 style = {styles.input}
                 checked = {weekdays[6]}
                 onPress={() => {
