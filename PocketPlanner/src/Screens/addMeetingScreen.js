@@ -13,7 +13,7 @@ export default function AddMeeting() {
     const [description, setDescription] = useState('');
     const [meetingDate, setMeetingDate] = useState();
     const [isRecurring, setIsRecurring] = useState(false);
-    const [isMultiDay, setIsMultiDay] = useState(false);
+    const [weekdays, setWeekdays] = useState([false, false, false, false, false, false, false]);
     const [user, setUser] = useState(null);
     const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
     const navigation = useNavigation();
@@ -37,59 +37,71 @@ export default function AddMeeting() {
 
     
     const handleAddMeeting = async () => {
-        if (!meetingName || !description) {
-          Alert.alert('Please enter a task name and description.');
-          return;
+      if (!meetingName || !description) {
+        Alert.alert('Please enter a task name and description.');
+        return;
+      }
+    
+      const selectedDays = weekdays.reduce((acc, curr, index) => {
+        if (curr) {
+          acc.push(index);
         }
-        try {
-          const meetingDetails = {
-            meetingName,
-            description,
-            meetingDate,
-            isRecurring,
-            category: '', // add a category property if needed
-            //completed: false,
-            userID: user.id,
-          };
-          if (isRecurring){
-            for(let i = 0; i < 10; i++){
-              const recurringMeetingDate = new Date(meetingDate.getTime() + i * 7 * 24 * 60 * 60 * 1000)
-              const recurringMeetingDetails = {
-                ...meetingDetails,
-                meetingDate: recurringMeetingDate,
-              };
-            try{
-              await API.graphql(graphqlOperation(createMeeting, { input: recurringMeetingDetails }));
-              console.log(`Created recurring meeting: ${recurringMeetingDetails.meetingName} on ${recurringMeetingDetails.meetingDate}`);
-              } catch (error) {
-                  console.log('Error creating recurring meeting:', error);
-                  Alert.alert('Error creating recurring meeting. Please try again later.');
-                  }
-            }
-          } else{
-            meetingDetails.meetingDate = meetingDate;
-            try{
-              await API.graphql(graphqlOperation(createMeeting, { input: meetingDetails }));
-              console.log(`Created meeting: ${meetingDetails.meetingName} on ${meetingDetails.meetingDate}`);
-            } catch (error) {
-              console.log('Error creating meeting:', error);
-              Alert.alert('Error creating meeting. Please try again later.');
-            }
-          }
-          setMeetingName('');
-          setDescription('');
-          setMeetingDate(new Date());
-          setIsRecurring(false);
-          console.log(meetingName);
-          console.log(description);
-          console.log(meetingDate);
-          console.log(isRecurring);
-          navigation.popToTop();
-        } catch (error) {
-          console.log('Error adding meeting:', error);
-          Alert.alert('Error adding meeting. Please try again later.');
-        }
+        return acc;
+      }, []);
+    
+      if (selectedDays.length === 0) {
+        Alert.alert('Please select at least one day of the week.');
+        return;
+      }
+    
+      const meetingDetails = {
+        meetingName,
+        description,
+        isRecurring,
+        category: '', // add a category property if needed
+        userID: user.id,
       };
+    
+      if (isRecurring) {
+        const recurringMeetingDetails = selectedDays.map((day) => {
+          const recurringMeetingDate = new Date(meetingDate.getTime() + day * 24 * 60 * 60 * 1000);
+          return {
+            ...meetingDetails,
+            meetingDate: recurringMeetingDate,
+          };
+        });
+    
+        try {
+          await Promise.all(
+            recurringMeetingDetails.map((meeting) =>
+              API.graphql(graphqlOperation(createMeeting, { input: meeting }))
+            )
+          );
+          console.log('Created recurring meetings:', recurringMeetingDetails);
+        } catch (error) {
+          console.log('Error creating recurring meetings:', error);
+          Alert.alert('Error creating recurring meetings. Please try again later.');
+        }
+      } else {
+        meetingDetails.meetingDate = meetingDate;
+        try {
+          await API.graphql(graphqlOperation(createMeeting, { input: meetingDetails }));
+          console.log(`Created meeting: ${meetingDetails.meetingName} on ${meetingDetails.meetingDate}`);
+        } catch (error) {
+          console.log('Error creating meeting:', error);
+          Alert.alert('Error creating meeting. Please try again later.');
+        }
+      }
+    
+      setMeetingName('');
+      setDescription('');
+      setMeetingDate(new Date());
+      setIsRecurring(false);
+      setWeekDays([false, false, false, false, false, false, false]);
+    
+      navigation.popToTop();
+    };
+    
       const handleConfirmDatePicker = (date) => {
         setMeetingDate(date);
         setIsDatePickerVisible(false);
@@ -146,12 +158,76 @@ export default function AddMeeting() {
         </View>
         <View style = {styles.inputContainer}>
             <CheckBox 
-                title = "Is This Meeting Multiple Days Per Week?"
-                value = {isMultiDay}
+                title = "Monday"
                 style = {styles.input}
-                checked={isMultiDay}
-                onPress={() => setIsMultiDay(!isMultiDay)}
+                checked = {weekdays[0]}
+                onPress={() => {
+                  const newWeekdays = [...weekdays]; // create a copy of the array
+                  newWeekdays[0] = !newWeekdays[0]; // toggle the value
+                  setWeekdays(newWeekdays); // update the state with the new array
+                }}
             />
+            <CheckBox 
+                title = "Tuesday"
+                style = {styles.input}
+                checked = {weekdays[1]}
+                onPress={() => {
+                  const newWeekdays = [...weekdays]; 
+                  newWeekdays[1] = !newWeekdays[1]; 
+                  setWeekdays(newWeekdays); 
+                }}
+            />
+            <CheckBox 
+                title = "Wednesday"
+                style = {styles.input}
+                checked = {weekdays[2]}
+                onPress={() => {
+                  const newWeekdays = [...weekdays]; 
+                  newWeekdays[2] = !newWeekdays[2];
+                  setWeekdays(newWeekdays); 
+                }}
+            />
+            <CheckBox 
+                title = "Thursday"
+                style = {styles.input}
+                checked = {weekdays[3]}
+                onPress={() => {
+                  const newWeekdays = [...weekdays]; 
+                  newWeekdays[3] = !newWeekdays[3]; 
+                  setWeekdays(newWeekdays); 
+                }}
+            />
+            <CheckBox 
+                title = "Friday"
+                style = {styles.input}
+                checked = {weekdays[4]}
+                onPress={() => {
+                  const newWeekdays = [...weekdays]; 
+                  newWeekdays[4] = !newWeekdays[4];
+                  setWeekdays(newWeekdays); 
+                }}
+            />
+            <CheckBox 
+                title = "Saturday"
+                style = {styles.input}
+                checked = {weekdays[5]}
+                onPress={() => {
+                  const newWeekdays = [...weekdays]; 
+                  newWeekdays[5] = !newWeekdays[5]; 
+                  setWeekdays(newWeekdays); 
+                }}
+            />
+            <CheckBox 
+                title = "Sunday"
+                style = {styles.input}
+                checked = {weekdays[6]}
+                onPress={() => {
+                  const newWeekdays = [...weekdays]; 
+                  newWeekdays[6] = !newWeekdays[6]; 
+                  setWeekdays(newWeekdays); 
+                }}
+            />
+
         </View>
     
         <TouchableOpacity onPress={() => setIsDatePickerVisible(true)} style={styles.button}>

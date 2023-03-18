@@ -13,6 +13,7 @@ import {CheckBox} from "react-native-elements";
 const TaskList = () => {
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
+  const [meetings, setMeetings] = useState([]);
   const [selectedOption, setSelectedOption] = useState("All");
   const [cutoffDate, setCutoffDate] = useState(() => {
     const date = new Date();
@@ -77,6 +78,22 @@ const TaskList = () => {
     }
   }, [user, tasks]);
 
+  useEffect(() => {
+    const fetchMeetings = async () => {
+      try {
+        const meetingData = await API.graphql(graphqlOperation(meetingsByUserID, { userID: user.id }));
+        const meetings = meetingData.data.meetingsByUserID.items;
+        setTasks(meetings);
+      } catch (err) {
+        console.log('Error fetching meetings:', err);
+      }
+    };
+  
+    if (user) {
+      fetchMeetings();
+    }
+  }, [user, meetings]);
+
   const handleDeleteTask = (task) => {
     Alert.alert(
       'Confirm Delete',
@@ -95,6 +112,30 @@ const TaskList = () => {
               setTasks(tasks.filter((t) => t !== task));
             } catch (error) {
               console.log('Error deleting task:', error);
+            }
+          },
+        },
+      ]
+    );
+  };
+  const handleDeleteMeeting = (meeting) => {
+    Alert.alert(
+      'Confirm Delete',
+      `Are you sure you want to delete the meeting? "${meeting.name}"?`,
+      [
+        {
+          text: 'Cancel',
+          style: 'default',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await API.graphql(graphqlOperation(deleteMeeting, { input: { id: meeting.id } }));
+              setMeetings(meetings.filter((t) => t !== meeting));
+            } catch (error) {
+              console.log('Error deleting meeting:', error);
             }
           },
         },
@@ -135,6 +176,7 @@ const TaskList = () => {
     );
   }
   
+  
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const options = {
@@ -152,7 +194,7 @@ const TaskList = () => {
     return `${hours}:${minutes} ${ampm}`;
   };
 
-  if (tasks.length === 0) {
+  if (tasks.length === 0 && meetings.length === 0) {
     return (
       <ComponentContainer>
         <EmptyImage
@@ -193,46 +235,48 @@ const TaskList = () => {
       </View>
       <ScrollView contentContainerStyle={styles.taskListContainer}>
 
-        {tasks
-        .filter(task => !task.deadline || (new Date(task.deadline) <= cutoffDate))
-        .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
-        .map((task, index) => (
-
-          <TouchableOpacity key={task.id} onPress={() => handleConfirmCompleted(task)}
-            style={[
-              styles.taskItem,
-              index === 0 && { marginTop: 40 },
-              task.completed ? styles.taskItemCompleted : styles.taskItem,
-            ]}
-          >
-
-              <View style={{ flex: 1 }}>
-                <Text style={styles.taskName}>{task.name}</Text>
-                {task.description && (
-                  <Text style={styles.taskDescription}>{task.description}</Text>
-                )}
-              </View>
-
-            {task.deadline && (
-
-              <View style={styles.taskDeadline}>
-                <Text style={styles.taskDate}>{formatDate(task.deadline)}</Text>
-                <Text style={styles.taskTime}>{formatTime(task.deadline)}</Text>
-              </View>
-
-            )}
-            <CheckBox
-              value={task.completed}
-              checked={task.completed}
-              style={styles.checkbox}
-              onPress={() => handleConfirmCompleted(task)}
-            />
-            <TouchableOpacity onPress={() => handleDeleteTask(task)} style={{}}>
-              <Icon name="times" color="red" size={20} />
-            </TouchableOpacity>
-          </TouchableOpacity>
-
-        ))}
+        {[...tasks, ...meetings]
+  .filter(item => (item.userId === currentUser.id) && (!item.deadline || !item.meetingTime || new Date(item.deadline) <= cutoffDate || new Date(item.meetingTime) <= cutoffDate))
+  .sort((a, b) => new Date(a.deadline || a.meetingTime) - new Date(b.deadline || b.meetingTime))
+  .map((item) => (
+    <TouchableOpacity 
+      key={item.id} 
+      onPress={() => handleConfirmCompleted(item)}
+      style={[
+        styles.taskItem,
+        item.completed ? styles.taskItemCompleted : styles.taskItem,
+      ]}
+    >
+      <View style={{ flex: 1 }}>
+        <Text style={styles.taskName}>{item.name}</Text>
+        {item.description && (
+          <Text style={styles.taskDescription}>{item.description}</Text>
+        )}
+      </View>
+      {item.deadline && (
+        <View style={styles.taskDeadline}>
+          <Text style={styles.taskDate}>{formatDate(item.deadline)}</Text>
+          <Text style={styles.taskTime}>{formatTime(item.deadline)}</Text>
+        </View>
+      )}
+      {item.meetingTime && (
+        <View style={styles.taskDeadline}>
+          <Text style={styles.taskDate}>{formatDate(item.meetingTime)}</Text>
+          <Text style={styles.taskTime}>{formatTime(item.meetingTime)}</Text>
+        </View>
+      )}
+      <CheckBox
+        value={item.completed}
+        checked={item.completed}
+        style={styles.checkbox}
+        onPress={() => handleConfirmCompleted(item)}
+      />
+      <TouchableOpacity onPress={() => handleDeleteTask(item)} style={{}}>
+        <Icon name="times" color="red" size={20} />
+      </TouchableOpacity>
+    </TouchableOpacity>
+  ))
+}
 
       </ScrollView>
     </View>
