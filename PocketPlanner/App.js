@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import DefaultStack from './src/Routes/defaultStack'
 import { Amplify, Auth, API, graphqlOperation, Storage} from 'aws-amplify';
-import {withAuthenticator} from 'aws-amplify-react-native';
+import {withAuthenticator, AmplifyTheme} from 'aws-amplify-react-native';
 import config from './src/aws-exports';
 import {getUser} from './src/graphql/queries';
 import {createUser} from './src/graphql/mutations';
@@ -102,4 +102,26 @@ const signUpConfig = {
   ],
 };
 
-export default withAuthenticator(App, {signUpConfig}); 
+const customTheme = {
+  ...AmplifyTheme,
+  button: {
+    ...AmplifyTheme.button,
+    backgroundColor: '#B0C4DE',
+    borderRadius: 10,
+  },
+  buttonDisabled: {
+    ...AmplifyTheme.buttonDisabled,
+    backgroundColor: '#B0C4DE',
+    borderRadius: 10,
+  },
+  sectionFooterLink: {
+    ...AmplifyTheme.sectionFooterLink,
+    color: '#b22222',
+  },
+  sectionFooterLinkDisabled: {
+    ...AmplifyTheme.sectionFooterLinkDisabled,
+    color: '#b22222',
+  },
+}
+
+export default withAuthenticator(App, {signUpConfig, theme: customTheme}); 
