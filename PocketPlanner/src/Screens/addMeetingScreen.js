@@ -262,7 +262,7 @@ const AddMeetingForm = () => {
         </TouchableOpacity>
 
 
-        <TouchableOpacity onPress={handleSingleMeeting} style={styles.meetingButton}>
+        <TouchableOpacity onPress={handleSingleMeeting} style={styles.singleMeetingButton}>
           <Text style={styles.buttonText}>Create Meeting</Text>
         </TouchableOpacity>
 
@@ -321,6 +321,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 140,
     alignItems: 'center',
     marginBottom: 10,
+  },
+  singleMeetingButton: {
+    backgroundColor: '#B0C4DE',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+    paddingHorizontal: 122,
   },
   button: {
     backgroundColor: '#B0C4DE',
