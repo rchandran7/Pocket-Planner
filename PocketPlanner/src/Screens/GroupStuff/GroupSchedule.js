@@ -1,18 +1,25 @@
-import React, { useState} from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState, useCallback} from 'react';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import { API, graphqlOperation, Auth } from 'aws-amplify';
 import { tasksByUserID, meetingsByUserID } from '../../graphql/queries';
+import { deleteTask, updateMeeting, updateTask, deleteMeeting } from '../../graphql/mutations';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function GroupSchedule({route}) {
   
     const [groupTasks, setGroupTasks] = useState([]);
     const [groupMeetings, setGroupMeetings] = useState([]);
+
+
     const {id} = route.params;
   const navigation = useNavigation();
   const handleAddTask = (id) => {
     navigation.navigate('AddGroupTask', {id: id});
+  }
+  const handleGoBack = () => {
+    navigation.pop();
   }
   const handleAddMeeting = (id) => {
     navigation.navigate('AddGroupMeeting', {id: id});
@@ -33,7 +40,143 @@ export default function GroupSchedule({route}) {
     }, [])
   );
   
+  const handleDeleteTask = useCallback(async (task) => {
+    Alert.alert(
+      'Confirm Delete',
+      `Are you sure you want to delete the task "${task.name}"?`,
+      [
+        {
+          text: 'Cancel',
+          style: 'default',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await API.graphql(graphqlOperation(deleteTask, { input: { id: task.id } }));
+  
+              const newGroupTasks = groupTasks.filter((t) => t !== task).sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+  
+              setGroupTasks(newGroupTasks);
+            } catch (error) {
+              console.log('Error deleting task:', error);
+            }
+          },
+        },
+      ]
+    );
+  }, [groupTasks, setGroupTasks]);
+  
+  
+  const handleDeleteMeeting = useCallback(async (meeting) => {
+    Alert.alert(
+      'Confirm Delete',
+      `Are you sure you want to delete the meeting "${meeting.name}"?`,
+      [
+        {
+          text: 'Cancel',
+          style: 'default',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await API.graphql(graphqlOperation(deleteMeeting, { input: { id: meeting.id } }));
+              const newGroupMeetings= groupMeetings.filter((t) => t !== meeting).sort((a, b) => new Date(a.meetingDate) - new Date(b.meetingDate));
+              setGroupMeetings(newGroupMeetings);
+            } catch (error) {
+              console.log('Error deleting meeting:', error);
+            }
+          },
+        },
+      ]
+    );
+  }, [groupMeetings, setGroupMeetings]);
 
+  const handleConfirmTask = (task) => {
+    if (!task.id) {
+      console.log('Error confirming task: Task ID is null or undefined');
+      return;
+    }
+  
+    const message = `Are you sure you want to mark "${task.name}" as ${
+      task.completed ? "incompleted" : "completed"
+    }?`;
+  
+    Alert.alert(
+      task.completed ? "Mark Incompleted" : "Mark Completed",
+      message,
+      [
+        {
+          text: 'Cancel',
+          style: 'destructive',
+        },
+        {
+          text: 'Confirm',
+          style: 'default',
+          onPress: async () => {
+            try {
+              const updatedTask = await API.graphql(graphqlOperation(updateTask, { input: { id: task.id, completed: !task.completed } }));
+              const updatedTasks = groupTasks.map(m => {
+                if (m.id === updatedTask.data.updateTask.id) {
+                  return updatedTask.data.updateTask;
+                } else {
+                  return m;
+                }
+              });
+              setGroupTasks(updatedTasks);
+            } catch (error) {
+              console.log('Error updating meeting:', error);
+            }
+          },
+        },
+      ]
+    );
+  }
+
+  const handleConfirmMeeting = (meeting) => {
+    if (!meeting.id) {
+      console.log('Error confirming meeting: Meeting ID is null or undefined');
+      return;
+    }
+  
+    const message = `Are you sure you want to mark "${meeting.name}" as ${
+      meeting.completed ? "incompleted" : "completed"
+    }?`;
+  
+    Alert.alert(
+      meeting.completed ? "Mark Incompleted" : "Mark Completed",
+      message,
+      [
+        {
+          text: 'Cancel',
+          style: 'destructive',
+        },
+        {
+          text: 'Confirm',
+          style: 'default',
+          onPress: async () => {
+            try {
+              const updatedMeeting = await API.graphql(graphqlOperation(updateMeeting, { input: { id: meeting.id, completed: !meeting.completed } }));
+              const updatedMeetings = groupMeetings.map(m => {
+                if (m.id === updatedMeeting.data.updateMeeting.id) {
+                  return updatedMeeting.data.updateMeeting;
+                } else {
+                  return m;
+                }
+              });
+              setGroupMeetings(updatedMeetings);
+            } catch (error) {
+              console.log('Error updating meeting:', error);
+            }
+          },
+        },
+      ]
+    );
+  }
+  
   const fetchTasks = async () => {
     try {
       const taskData = await API.graphql(graphqlOperation(tasksByUserID, {userID: id}));
@@ -47,18 +190,24 @@ export default function GroupSchedule({route}) {
   
       setGroupTasks(sortedTasks);
       setGroupMeetings(sortedMeetings);
-      console.log(groupTasks);
-      //console.log(groupMeetings);
+
     } catch (err) {
       console.log('error fetching tasks and meetings', err);
     }
   };
+  const allItems = [...groupTasks, ...groupMeetings];
+      const sortedItems = allItems.sort((a, b) => {
+        const aDate = a.meetingDate || a.deadline;
+        const bDate = b.meetingDate || b.deadline;
+        return new Date(aDate) - new Date(bDate);
+        });
+
 
   const renderItem = ({ item }) => {
     if (item.meetingDate) {
       return (
         <TouchableOpacity 
-          onPress={() => console.log(item)}
+        onPress={() => handleConfirmMeeting(item)}
           style={[
             styles.taskItem,
             item.completed ? styles.taskItemCompleted : styles.taskItem,
@@ -67,12 +216,17 @@ export default function GroupSchedule({route}) {
           <Text style={styles.nameText}>{item.name}</Text>
           <Text style={styles.subText}>{item.description}</Text>
           <Text style={styles.dateText}> {formatDate(item.meetingDate)} </Text>
+
+          <TouchableOpacity onPress={() => handleDeleteMeeting(item)}>
+          <Icon name="times" color="red" size={20} />
+        </TouchableOpacity>
+
         </TouchableOpacity>
       );
     } else {
       return (
         <TouchableOpacity 
-          onPress={() => console.log(item)}
+          onPress={() => handleConfirmTask(item)}
           style={[
             styles.taskItem,
             item.completed ? styles.taskItemCompleted : styles.taskItem,
@@ -81,6 +235,9 @@ export default function GroupSchedule({route}) {
           <Text style={styles.nameText}>{item.name}</Text>
           <Text style={styles.subText}>{item.description}</Text>
           <Text style={styles.dateText}> {formatDate(item.deadline)} </Text>
+          <TouchableOpacity onPress={() => handleDeleteTask(item)}>
+          <Icon name="times" color="red" size={20} />
+        </TouchableOpacity>
         </TouchableOpacity>
       );
     }
@@ -88,17 +245,20 @@ export default function GroupSchedule({route}) {
 
     return (
       <SafeAreaView style={styles.container}>
+        <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
+            <Text style={styles.buttonText}>Go Back</Text>
+          </TouchableOpacity>
         <FlatList
-            data={[...groupTasks, ...groupMeetings]}
+            data={sortedItems}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
         />
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.joinButton} onPress={() => handleAddTask(id)}>
-            <Text style={styles.createText}>Add Task</Text>
+            <Text style={styles.buttonText}>Add Task</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.joinButton} onPress={() => handleAddMeeting(id)}>
-            <Text style={styles.createText}>Add Meeting</Text>
+            <Text style={styles.buttonText}>Add Meeting</Text>
           </TouchableOpacity>
         </View>
         
@@ -156,9 +316,20 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: '49%',
   },
+  backButton: {
+    backgroundColor: '#B0C4DE',
+    borderRadius: 10,
+    padding: 10,
+    alignItems: 'center',
+    marginBottom: 10,
+    width: '100%',
+  },
   nameText: {
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  buttonText: {
+    fontWeight: 'bold',
   },
   subText: {
     fontSize: 14,
