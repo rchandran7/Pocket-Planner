@@ -187,7 +187,7 @@ const AddMeetingForm = () => {
     {isMeetingRecurring ? (
 
     <View>
-      <TouchableOpacity onPress={showStartDatePicker} style={styles.meetingButton}>
+      <TouchableOpacity onPress={showStartDatePicker} style={styles.startButton}>
           <Text style={styles.buttonText}>Start Date and Meeting Time</Text>
           <Text style={styles.deadlineText}>{formatDate(startDate)}, {formatTime(startDate)}</Text>
         </TouchableOpacity>
@@ -256,7 +256,7 @@ const AddMeetingForm = () => {
     ) : (
       <View>
 
-        <TouchableOpacity onPress={() => setIsDatePickerVisible(true)} style={styles.meetingButton}>
+        <TouchableOpacity onPress={() => setIsDatePickerVisible(true)} style={styles.hideMeetingButton}>
           <Text style={styles.buttonText}>Set Meeting Date and Time</Text>
           <Text style={styles.deadlineText}>{formatDate(meetingTime)}, {formatTime(meetingTime)}</Text>
         </TouchableOpacity>
@@ -290,7 +290,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
     paddingHorizontal: 20,
   },
   buttonText: {
@@ -309,6 +308,7 @@ const styles = StyleSheet.create({
   deadlineText: {
     color: '#fff',
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   buttonContainer: {
     width: '100%',
@@ -330,12 +330,23 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: '100%',
   },
+  startButton: {
+    backgroundColor: '#B0C4DE',
+    borderRadius: 10,
+    padding: 10,
+    alignItems: 'center',
+    marginBottom: 10,
+    paddingHorizontal: 50,
+  },
   hideMeetingButton: {
     backgroundColor: '#B0C4DE',
     borderRadius: 10,
     padding: 10,
     marginBottom: 10,
-    paddingHorizontal: 50
+    paddingHorizontal: 50,
+  },
+  checkboxContainer: {
+    backgroundColor: 'transparent',
   },
 });
 
