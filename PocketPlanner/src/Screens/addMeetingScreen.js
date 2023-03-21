@@ -187,7 +187,7 @@ const AddMeetingForm = () => {
     {isMeetingRecurring ? (
 
     <View>
-      <TouchableOpacity onPress={showStartDatePicker} style={styles.button}>
+      <TouchableOpacity onPress={showStartDatePicker} style={styles.meetingButton}>
           <Text style={styles.buttonText}>Start Date and Meeting Time</Text>
           <Text style={styles.deadlineText}>{formatDate(startDate)}, {formatTime(startDate)}</Text>
         </TouchableOpacity>
@@ -200,7 +200,7 @@ const AddMeetingForm = () => {
         minimumDate={new Date()}
       />
       
-      <TouchableOpacity onPress={showEndDatePicker} style={styles.button}>
+      <TouchableOpacity onPress={showEndDatePicker} style={styles.meetingButton}>
           <Text style={styles.buttonText}>End Date</Text>
           <Text style={styles.deadlineText}>{formatDate(endDate)}</Text>
         </TouchableOpacity>
@@ -247,7 +247,7 @@ const AddMeetingForm = () => {
         onPress={() => setIncludeSaturdays(!includeSaturdays)}
       />
 
-      <TouchableOpacity onPress={handleRecurringMeeting} style={styles.button}>
+      <TouchableOpacity onPress={handleRecurringMeeting} style={styles.hideMeetingButton}>
         <Text style={styles.buttonText}>Create Meetings</Text>
       </TouchableOpacity>
 
@@ -329,6 +329,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
     width: '100%',
+  },
+  hideMeetingButton: {
+    backgroundColor: '#B0C4DE',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10,
+    paddingHorizontal: 50
   },
 });
 

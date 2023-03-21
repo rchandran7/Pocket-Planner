@@ -14,6 +14,7 @@ const TaskList = () => {
   const [user, setUser] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [meetings, setMeetings] = useState([]);
+  const [isEmpty, setIsEmpty] = useState(tasks.length === 0 && meetings.length === 0);
   const [selectedOption, setSelectedOption] = useState("All");
   const [cutoffDate, setCutoffDate] = useState(() => {
     const date = new Date();
@@ -36,7 +37,6 @@ const TaskList = () => {
       case "Next 30 Days":
         daysToAdd = 30;
         break;
-        return;
       default:
         break;
     }
@@ -226,8 +226,11 @@ const TaskList = () => {
     const ampm = date.getHours() < 12 ? 'AM' : 'PM';
     return `${hours}:${minutes} ${ampm}`;
   };
+  useEffect(() => {
+    setIsEmpty(tasks.length === 0 && meetings.length === 0);
+  }, [tasks, meetings]);
 
-  if (tasks.length === 0 && meetings.length === 0) {
+  if (isEmpty) {
     return (
       <ComponentContainer>
         <EmptyImage
