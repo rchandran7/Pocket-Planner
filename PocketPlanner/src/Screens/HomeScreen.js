@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { API, graphqlOperation } from 'aws-amplify';
-import { tasksByUserID, listUsers } from '../graphql/queries';
-import { deleteTask, updateTask } from '../graphql/mutations';
+import { tasksByUserID, listUsers, meetingsByUserID } from '../graphql/queries';
+import { deleteTask, updateMeeting, updateTask, deleteMeeting } from '../graphql/mutations';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styled from 'styled-components';
 import Header from '../Component/ScheduleList/Header';
@@ -83,7 +83,7 @@ const TaskList = () => {
       try {
         const meetingData = await API.graphql(graphqlOperation(meetingsByUserID, { userID: user.id }));
         const meetings = meetingData.data.meetingsByUserID.items;
-        setTasks(meetings);
+        setMeetings(meetings);
       } catch (err) {
         console.log('Error fetching meetings:', err);
       }
@@ -94,7 +94,7 @@ const TaskList = () => {
     }
   }, [user, meetings]);
 
-  const handleDeleteTask = (task) => {
+  const handleDeleteTask = useCallback(async (task) => {
     Alert.alert(
       'Confirm Delete',
       `Are you sure you want to delete the task "${task.name}"?`,
@@ -117,11 +117,12 @@ const TaskList = () => {
         },
       ]
     );
-  };
-  const handleDeleteMeeting = (meeting) => {
+  }, [setTasks]);
+  
+  const handleDeleteMeeting = useCallback(async (meeting) => {
     Alert.alert(
       'Confirm Delete',
-      `Are you sure you want to delete the meeting? "${meeting.name}"?`,
+      `Are you sure you want to delete the meeting "${meeting.name}"?`,
       [
         {
           text: 'Cancel',
@@ -141,9 +142,11 @@ const TaskList = () => {
         },
       ]
     );
-  };
+  }, [setMeetings]);
 
-  const handleConfirmCompleted = (task) => {
+  
+
+  const handleConfirmTask = (task) => {
     if (!task.id) {
       console.log('Error confirming task: Task ID is null or undefined');
       return;
@@ -154,7 +157,7 @@ const TaskList = () => {
     }?`;
 
     Alert.alert(
-      task.completed ? "Mark Task Incompleted" : "Mark Task Completed",
+      task.completed ? "Mark Incompleted" : "Mark Completed",
       message,
       [
         {
@@ -167,6 +170,38 @@ const TaskList = () => {
           onPress: async () => {
             try {
               await API.graphql(graphqlOperation(updateTask, { input: { id: task.id, completed: !task.completed } }));
+            } catch (error) {
+              console.log('Error updating task:', error);
+            }
+          },
+        },
+      ]
+    );
+  }
+  const handleConfirmMeeting = (task) => {
+    if (!task.id) {
+      console.log('Error confirming task: Task ID is null or undefined');
+      return;
+    }
+
+    const message = `Are you sure you want to mark "${task.name}" as ${
+      task.completed ? "incompleted" : "completed"
+    }?`;
+
+    Alert.alert(
+      task.completed ? "Mark Incompleted" : "Mark Completed",
+      message,
+      [
+        {
+          text: 'Cancel',
+          style: 'destructive',
+        },
+        {
+          text: 'Confirm',
+          style: 'default',
+          onPress: async () => {
+            try {
+              await API.graphql(graphqlOperation(updateMeeting, { input: { id: task.id, completed: !task.completed } }));
             } catch (error) {
               console.log('Error updating task:', error);
             }
@@ -235,13 +270,23 @@ const TaskList = () => {
       </View>
       <ScrollView contentContainerStyle={styles.taskListContainer}>
 
-        {[...tasks, ...meetings]
-  .filter(item => (item.userId === currentUser.id) && (!item.deadline || !item.meetingTime || new Date(item.deadline) <= cutoffDate || new Date(item.meetingTime) <= cutoffDate))
-  .sort((a, b) => new Date(a.deadline || a.meetingTime) - new Date(b.deadline || b.meetingTime))
+      {[...tasks, ...meetings]
+  .filter(item => (!item.deadline || new Date(item.deadline) <= cutoffDate) && (!item.meetingDate || new Date(item.meetingDate) <= cutoffDate))
+  .sort((a, b) => {
+    const aTime = new Date(a.deadline || a.meetingDate);
+    const bTime = new Date(b.deadline || b.meetingDate);
+    return aTime - bTime;
+  })
   .map((item) => (
     <TouchableOpacity 
       key={item.id} 
-      onPress={() => handleConfirmCompleted(item)}
+      onPress={() => {
+        if (item.meetingDate) {
+          handleConfirmMeeting(item);
+        } else {
+          handleConfirmTask(item);
+        }
+      }}
       style={[
         styles.taskItem,
         item.completed ? styles.taskItemCompleted : styles.taskItem,
@@ -259,21 +304,34 @@ const TaskList = () => {
           <Text style={styles.taskTime}>{formatTime(item.deadline)}</Text>
         </View>
       )}
-      {item.meetingTime && (
+      {item.meetingDate && (
         <View style={styles.taskDeadline}>
-          <Text style={styles.taskDate}>{formatDate(item.meetingTime)}</Text>
-          <Text style={styles.taskTime}>{formatTime(item.meetingTime)}</Text>
+          <Text style={styles.taskDate}>{formatDate(item.meetingDate)}</Text>
+          <Text style={styles.taskTime}>{formatTime(item.meetingDate)}</Text>
         </View>
       )}
       <CheckBox
         value={item.completed}
         checked={item.completed}
         style={styles.checkbox}
-        onPress={() => handleConfirmCompleted(item)}
+        onPress={() => {
+          if (item.meetingDate) {
+            handleConfirmMeeting(item);
+          } else {
+            handleConfirmTask(item);
+          }
+        }}
       />
-      <TouchableOpacity onPress={() => handleDeleteTask(item)} style={{}}>
+      <TouchableOpacity onPress={() => {
+          if (item.meetingDate) {
+            handleDeleteMeeting(item);
+          } else {
+            handleDeleteTask(item);
+          }
+        }}>
         <Icon name="times" color="red" size={20} />
       </TouchableOpacity>
+
     </TouchableOpacity>
   ))
 }

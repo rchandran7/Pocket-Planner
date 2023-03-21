@@ -1,22 +1,69 @@
-import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Keyboard } from 'react-native'
-import { TextInput } from 'react-native'
-import { useNavigation } from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { Button, TextInput, View, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import {CheckBox} from "react-native-elements";
-import { API, graphqlOperation } from 'aws-amplify';
-import { createMeeting } from '../graphql/mutations';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { createMeeting } from '../graphql/mutations';
+import { listUsers } from '../graphql/queries';
+import { API, graphqlOperation } from 'aws-amplify';
+import { AWSDate } from '@aws-amplify/core';
+import { useNavigation } from '@react-navigation/native';
 
-export default function AddMeeting() {
 
-    const [meetingName, setMeetingName] = useState('');
-    const [description, setDescription] = useState('');
-    const [meetingDate, setMeetingDate] = useState();
-    const [isRecurring, setIsRecurring] = useState(false);
-    const [weekdays, setWeekdays] = useState([false, false, false, false, false, false, false]);
-    const [user, setUser] = useState(null);
-    const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
-    const navigation = useNavigation();
+const AddMeetingForm = () => {
+
+  const navigation = useNavigation();
+
+  const [isMeetingRecurring, setIsMeetingRecurring] = useState(false);
+  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+  const [meetingTime, setMeetingTime] = useState(new Date());
+  const [name, setName] = useState('');
+  const [user, setUser] = useState(null);
+  const [description, setDescription] = useState('');
+
+  const [isStartDatePickerVisible, setStartDatePickerVisibility] = useState(false);
+  const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
+  const [includeSundays, setIncludeSundays] = useState(false);
+  const [includeMondays, setIncludeMondays] = useState(false);
+  const [includeTuesdays, setIncludeTuesdays] = useState(false);
+  const [includeWednesdays, setIncludeWednesdays] = useState(false);
+  const [includeThursdays, setIncludeThursdays] = useState(false);
+  const [includeFridays, setIncludeFridays] = useState(false);
+  const [includeSaturdays, setIncludeSaturdays] = useState(false);
+  
+  // Functions to show/hide the date pickers
+  const showStartDatePicker = () => {
+    setStartDatePickerVisibility(true);
+  };
+  
+  const hideStartDatePicker = () => {
+    setStartDatePickerVisibility(false);
+  };
+  
+  const showEndDatePicker = () => {
+    setEndDatePickerVisibility(true);
+  };
+  
+  const hideEndDatePicker = () => {
+    setEndDatePickerVisibility(false);
+  };
+  
+  // Functions to handle selecting a date
+  const handleStartDateConfirm = (date) => {
+    setStartDate(date); // Save date in YYYY-MM-DD format
+    hideStartDatePicker();
+  };
+  
+  const handleEndDateConfirm = (date) => {
+    setEndDate(date); // Save date in YYYY-MM-DD format
+    hideEndDatePicker();
+  };
+  const handleCheckboxChange = () => {
+    setIsMeetingRecurring(!isMeetingRecurring);
+    setIsDatePickerVisible(false); // Hide the date picker when the checkbox is checked/unchecked
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -31,278 +78,241 @@ export default function AddMeeting() {
     fetchUser();
   }, []);
 
-    const handleReturn = async () =>{
-      navigation.popToTop();
-    }
+  const handleConfirmDatePicker = (date) => {
+    setMeetingTime(date);
+    setIsDatePickerVisible(false);
+  };
 
-    
-    const handleAddMeeting = async () => {
-      if (!meetingName || !description) {
-        Alert.alert('Please enter a task name and description.');
-        return;
-      }
-    
-      const selectedDays = weekdays.reduce((acc, curr, index) => {
-        if (curr) {
-          acc.push(index);
-        }
-        return acc;
-      }, []);
-    
-      if (selectedDays.length === 0) {
-        Alert.alert('Please select at least one day of the week.');
-        return;
-      }
-    
-      const meetingDetails = {
-        meetingName,
-        description,
-        isRecurring,
-        category: '', // add a category property if needed
-        userID: user.id,
-      };
-    
-      if (isRecurring) {
-        const recurringMeetingDetails = selectedDays.map((day) => {
-          const recurringMeetingDate = new Date(meetingDate.getTime() + day * 24 * 60 * 60 * 1000);
-          return {
-            ...meetingDetails,
-            meetingDate: recurringMeetingDate,
-          };
-        });
-    
-        try {
-          await Promise.all(
-            recurringMeetingDetails.map((meeting) =>
-              API.graphql(graphqlOperation(createMeeting, { input: meeting }))
-            )
-          );
-          console.log('Created recurring meetings:', recurringMeetingDetails);
-        } catch (error) {
-          console.log('Error creating recurring meetings:', error);
-          Alert.alert('Error creating recurring meetings. Please try again later.');
-        }
-      } else {
-        meetingDetails.meetingDate = meetingDate;
-        try {
-          await API.graphql(graphqlOperation(createMeeting, { input: meetingDetails }));
-          console.log(`Created meeting: ${meetingDetails.meetingName} on ${meetingDetails.meetingDate}`);
-        } catch (error) {
-          console.log('Error creating meeting:', error);
-          Alert.alert('Error creating meeting. Please try again later.');
-        }
-      }
-    
-      setMeetingName('');
-      setDescription('');
-      setMeetingDate(new Date());
-      setIsRecurring(false);
-      setWeekDays([false, false, false, false, false, false, false]);
-    
-      navigation.popToTop();
+  const handleCancelDatePicker = () => {
+    setIsDatePickerVisible(false);
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = {
+      month: '2-digit',
+      day: '2-digit',
     };
-    
-      const handleConfirmDatePicker = (date) => {
-        setMeetingDate(date);
-        setIsDatePickerVisible(false);
-      };
-    
-      const handleCancelDatePicker = () => {
-        setIsDatePickerVisible(false);
-      };
-    
-      const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        const options = {
-          month: '2-digit',
-          day: '2-digit',
-        };
-        return date.toLocaleDateString('en-US', options);
-      };
-    
-      const formatTime = (dateString) => {
-        const date = new Date(dateString);
-        const hours = date.getHours() % 12 || 12;
-        const minutes = date.getMinutes().toString().padStart(2, '0');
-        const ampm = date.getHours() < 12 ? 'AM' : 'PM';
-        return `${hours}:${minutes} ${ampm}`;
-      };
-    return (
-        <View style={styles.container}>
-            <View style={styles.inputContainer}>
-            <Text style={styles.label}>Task Name:</Text>
-                <TextInput
-                style={styles.input}
-                placeholder="Enter Meeting Name"
-                value={meetingName}
-                onChangeText={(text) => setMeetingName(text)}
-                />
-            </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Task Description:</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Meeting description"
-            value={description}
-            onChangeText={(text) => setDescription(text)}
-          />
-        </View>
-        <View style = {styles.inputContainer}>
-            <CheckBox 
-                title = "Is This Meeting Recurring?"
-                value = {isRecurring}
-                style = {styles.input}
-                checked={isRecurring}
-                onPress={() => setIsRecurring(!isRecurring)}
-            />
-        </View>
-        <View style = {styles.inputContainer}>
-            <CheckBox 
-                title = "Monday"
-                style = {styles.input}
-                checked = {weekdays[0]}
-                onPress={() => {
-                  const newWeekdays = [...weekdays]; // create a copy of the array
-                  newWeekdays[0] = !newWeekdays[0]; // toggle the value
-                  setWeekdays(newWeekdays); // update the state with the new array
-                }}
-            />
-            <CheckBox 
-                title = "Tuesday"
-                style = {styles.input}
-                checked = {weekdays[1]}
-                onPress={() => {
-                  const newWeekdays = [...weekdays]; 
-                  newWeekdays[1] = !newWeekdays[1]; 
-                  setWeekdays(newWeekdays); 
-                }}
-            />
-            <CheckBox 
-                title = "Wednesday"
-                style = {styles.input}
-                checked = {weekdays[2]}
-                onPress={() => {
-                  const newWeekdays = [...weekdays]; 
-                  newWeekdays[2] = !newWeekdays[2];
-                  setWeekdays(newWeekdays); 
-                }}
-            />
-            <CheckBox 
-                title = "Thursday"
-                style = {styles.input}
-                checked = {weekdays[3]}
-                onPress={() => {
-                  const newWeekdays = [...weekdays]; 
-                  newWeekdays[3] = !newWeekdays[3]; 
-                  setWeekdays(newWeekdays); 
-                }}
-            />
-            <CheckBox 
-                title = "Friday"
-                style = {styles.input}
-                checked = {weekdays[4]}
-                onPress={() => {
-                  const newWeekdays = [...weekdays]; 
-                  newWeekdays[4] = !newWeekdays[4];
-                  setWeekdays(newWeekdays); 
-                }}
-            />
-            <CheckBox 
-                title = "Saturday"
-                style = {styles.input}
-                checked = {weekdays[5]}
-                onPress={() => {
-                  const newWeekdays = [...weekdays]; 
-                  newWeekdays[5] = !newWeekdays[5]; 
-                  setWeekdays(newWeekdays); 
-                }}
-            />
-            <CheckBox 
-                title = "Sunday"
-                style = {styles.input}
-                checked = {weekdays[6]}
-                onPress={() => {
-                  const newWeekdays = [...weekdays]; 
-                  newWeekdays[6] = !newWeekdays[6]; 
-                  setWeekdays(newWeekdays); 
-                }}
-            />
+    return date.toLocaleDateString('en-US', options);
+  };
 
-        </View>
-    
-        <TouchableOpacity onPress={() => setIsDatePickerVisible(true)} style={styles.button}>
-          <Text style={styles.buttonText}>Set Meeting Date</Text>
-          <Text style={styles.deadlineText}>{formatDate(meetingDate)}, {formatTime(meetingDate)}</Text>
+  const handleReturn = () =>{
+    navigation.pop();
+  }
+  const formatTime = (dateString) => {
+    const date = new Date(dateString);
+    const hours = date.getHours() % 12 || 12;
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const ampm = date.getHours() < 12 ? 'AM' : 'PM';
+    return `${hours}:${minutes} ${ampm}`;
+  };
+
+  const handleRecurringMeeting = async () => {
+    try {
+      const dates = [];
+      let currentDate =  new Date(startDate.getTime());
+      console.log(currentDate);
+      while (currentDate <= endDate) {
+        const dayOfWeek = currentDate.getUTCDay();
+        if ((dayOfWeek === 0 && includeSundays) || (dayOfWeek === 1 && includeMondays) || (dayOfWeek === 2 && includeTuesdays) || (dayOfWeek === 3 && includeWednesdays) || (dayOfWeek === 4 && includeThursdays) || (dayOfWeek === 5 && includeFridays) || (dayOfWeek === 6 && includeSaturdays)) {
+          dates.push(new Date(currentDate.getTime())); 
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+  
+      for (const thisDate of dates) {
+        const input = {
+          name,
+          description,
+          meetingDate: thisDate,
+          userID: user.id, // replace with actual user ID
+          isRecurring: true,
+          completed: false,
+        };
+        const result = await API.graphql(graphqlOperation(createMeeting, { input }));
+        console.log('Created meeting:', result.data.createMeeting);
+      }
+      navigation.pop();
+      // handle successful creation here, e.g. navigate to another screen
+    } catch (error) {
+      console.error('Error creating meeting:', error);
+      // handle error here, e.g. show error message to user
+    }
+  };
+  
+  const handleSingleMeeting = async () => {
+    try {
+      const input = {
+        name,
+        description,
+        meetingDate: meetingTime,
+        userID: user.id, // replace with actual user ID
+        isRecurring: false,
+        completed: false,
+      };
+      const result = await API.graphql(graphqlOperation(createMeeting, { input }));
+      console.log('Created meeting:', result.data.createMeeting);
+      navigation.pop();
+      // handle successful creation here, e.g. navigate to another screen
+    } catch (error) {
+      console.error('Error creating meeting:', error);
+      // handle error here, e.g. show error message to user
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        value={name}
+        onChangeText={(text) => setName(text)}
+        placeholder="Meeting Name"
+      />
+      <TextInput
+        style={styles.input}
+        value={description}
+        onChangeText={(text) => setDescription(text)}
+        placeholder="Meeting Description"
+      />
+
+
+    <CheckBox
+      checked={isMeetingRecurring}
+      onPress={handleCheckboxChange}
+      title="Is Meeting Recurring"
+      containerStyle={styles.checkboxContainer}
+      textStyle={styles.checkboxText}
+    />
+
+    {isMeetingRecurring ? (
+
+    <View>
+      <TouchableOpacity onPress={showStartDatePicker} style={styles.button}>
+          <Text style={styles.buttonText}>Start Date and Meeting Time</Text>
+          <Text style={styles.deadlineText}>{formatDate(startDate)}, {formatTime(startDate)}</Text>
         </TouchableOpacity>
-    
-        <DateTimePickerModal
-          isVisible={isDatePickerVisible}
-          mode="datetime"
-          onConfirm={handleConfirmDatePicker}
-          onCancel={handleCancelDatePicker}
-          minimumDate={new Date()}
-        />
-          <TouchableOpacity onPress={handleAddMeeting} style={styles.addButton}>
-            <Text style={styles.buttonText}>Add Meeting</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={handleReturn} style={styles.addButton}>
-            <Text style={styles.buttonText}>Return to Schedule</Text>
-          </TouchableOpacity>
+
+      <DateTimePickerModal
+        isVisible={isStartDatePickerVisible}
+        mode="datetime"
+        onConfirm={handleStartDateConfirm}
+        onCancel={hideStartDatePicker}
+        minimumDate={new Date()}
+      />
+      
+      <TouchableOpacity onPress={showEndDatePicker} style={styles.button}>
+          <Text style={styles.buttonText}>End Date</Text>
+          <Text style={styles.deadlineText}>{formatDate(endDate)}</Text>
+        </TouchableOpacity>
+      <DateTimePickerModal
+        isVisible={isEndDatePickerVisible}
+        mode="datetime"
+        onConfirm={handleEndDateConfirm}
+        onCancel={hideEndDatePicker}
+        minimumDate={new Date()}
+      />
+      <CheckBox
+        title='Sunday'
+        checked={includeSundays}
+        onPress={() => setIncludeSundays(!includeSundays)}
+      />
+      <CheckBox
+        title='Monday'
+        checked={includeMondays}
+        onPress={() => setIncludeMondays(!includeMondays)}
+      />
+      <CheckBox
+        title='Tuesday'
+        checked={includeTuesdays}
+        onPress={() => setIncludeTuesdays(!includeTuesdays)}
+      />
+      <CheckBox
+        title='Wednesday'
+        checked={includeWednesdays}
+        onPress={() => setIncludeWednesdays(!includeWednesdays)}
+      />
+      <CheckBox
+        title='Thursday'
+        checked={includeThursdays}
+        onPress={() => setIncludeThursdays(!includeThursdays)}
+      />
+      <CheckBox
+        title='Friday'
+        checked={includeFridays}
+        onPress={() => setIncludeFridays(!includeFridays)}
+      />
+      <CheckBox
+        title='Saturday'
+        checked={includeSaturdays}
+        onPress={() => setIncludeSaturdays(!includeSaturdays)}
+      />
+
+      <TouchableOpacity onPress={handleRecurringMeeting} style={styles.button}>
+        <Text style={styles.buttonText}>Create Meetings</Text>
+      </TouchableOpacity>
+
+    </View>
+      
+    ) : (
+      <View>
+
+        <TouchableOpacity onPress={() => setIsDatePickerVisible(true)} style={styles.button}>
+          <Text style={styles.buttonText}>Set Meeting Date and Time</Text>
+          <Text style={styles.deadlineText}>{formatDate(meetingTime)}, {formatTime(meetingTime)}</Text>
+        </TouchableOpacity>
+
+
+        <TouchableOpacity onPress={handleSingleMeeting} style={styles.button}>
+          <Text style={styles.buttonText}>Create Meeting</Text>
+        </TouchableOpacity>
+
       </View>
-            
-    )
-}
+    )}
+
+    <DateTimePickerModal
+      isVisible={isDatePickerVisible}
+      mode="datetime"
+      onConfirm={handleConfirmDatePicker}
+      onCancel={handleCancelDatePicker}
+      minimumDate={new Date()}
+    />
+
+    <TouchableOpacity onPress={handleReturn} style={styles.button}>
+      <Text style={styles.buttonText}>Return to Schedule</Text>
+    </TouchableOpacity>
+
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-        backgroundColor: '#fff',
-      },
-      inputContainer: {
-        marginBottom: 10,
-        width: '100%',
-      },
-      label: {
-        fontWeight: 'bold',
-        marginBottom: 5,
-      },
-      input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 4,
-        padding: 10,
-        width: '100%',
-      },
-      button: {
-        backgroundColor: '#B0C4DE',
-        borderRadius: 10,
-        padding: 10,
-        alignItems: 'center',
-        marginBottom: 10,
-        width: '100%',
-      },
-      deadlineText: {
-        color: '#fff',
-        fontWeight: 'bold',
-        marginTop: 5,
-      },
-      addButton: {
-        backgroundColor: '#B0C4DE',
-        borderRadius: 10,
-        padding: 10,
-        marginTop: 10,
-        alignItems: 'center',
-        width: '100%',
-      },
-      buttonText: {
-        color: '#fff',
-        fontWeight: 'bold',
-      },
-      bottomContainer: {
-        flex: 1,
-        justifyContent: 'flex-end',
-    },
-})
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    paddingHorizontal: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    padding: 10,
+    marginBottom: 20,
+    width: '100%',
+  },
+  buttonContainer: {
+    width: '100%',
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: '#B0C4DE',
+    borderRadius: 10,
+    padding: 10,
+    alignItems: 'center',
+    marginBottom: 10,
+    width: '100%',
+  },
+});
+
+export default AddMeetingForm;

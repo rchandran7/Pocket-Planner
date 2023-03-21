@@ -8,12 +8,7 @@ export const createGroup = /* GraphQL */ `
   ) {
     createGroup(input: $input, condition: $condition) {
       id
-      image {
-        bucket
-        region
-        key
-        localUri
-      }
+      name
       Tasks {
         nextToken
       }
@@ -27,6 +22,12 @@ export const createGroup = /* GraphQL */ `
       }
       users {
         nextToken
+      }
+      image {
+        bucket
+        region
+        key
+        localUri
       }
       createdAt
       updatedAt
@@ -41,12 +42,7 @@ export const updateGroup = /* GraphQL */ `
   ) {
     updateGroup(input: $input, condition: $condition) {
       id
-      image {
-        bucket
-        region
-        key
-        localUri
-      }
+      name
       Tasks {
         nextToken
       }
@@ -60,6 +56,12 @@ export const updateGroup = /* GraphQL */ `
       }
       users {
         nextToken
+      }
+      image {
+        bucket
+        region
+        key
+        localUri
       }
       createdAt
       updatedAt
@@ -74,12 +76,7 @@ export const deleteGroup = /* GraphQL */ `
   ) {
     deleteGroup(input: $input, condition: $condition) {
       id
-      image {
-        bucket
-        region
-        key
-        localUri
-      }
+      name
       Tasks {
         nextToken
       }
@@ -93,6 +90,12 @@ export const deleteGroup = /* GraphQL */ `
       }
       users {
         nextToken
+      }
+      image {
+        bucket
+        region
+        key
+        localUri
       }
       createdAt
       updatedAt
@@ -450,6 +453,7 @@ export const createUserGroup = /* GraphQL */ `
       userId
       group {
         id
+        name
         createdAt
         updatedAt
         groupTimeFrameId
@@ -479,6 +483,7 @@ export const updateUserGroup = /* GraphQL */ `
       userId
       group {
         id
+        name
         createdAt
         updatedAt
         groupTimeFrameId
@@ -508,6 +513,7 @@ export const deleteUserGroup = /* GraphQL */ `
       userId
       group {
         id
+        name
         createdAt
         updatedAt
         groupTimeFrameId

@@ -31,6 +31,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import SettingsScreen from './SettingsScreen';
 import ProfileScreen from './ProfileScreen';
 import HomeScreen from './HomeScreen';
+import GroupScreen from './GroupStuff/GroupScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -53,6 +54,16 @@ function ScreenNavigator() {
           }}
         /> 
         <Tab.Screen 
+          name="Classes" 
+          component={GroupScreen} 
+          options={{
+            tabBarLabel: 'Classes',
+            tabBarIcon: ({ color }) => (
+              <MaterialIcons name = "settings" color={color} size={22} />
+            )
+          }}
+        />
+        <Tab.Screen 
           name="Profile" 
           component={ProfileScreen} 
           options={{
@@ -74,6 +85,8 @@ function ScreenNavigator() {
             )
           }}
         />
+
+
       </Tab.Navigator>
   );
 }

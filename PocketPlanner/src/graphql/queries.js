@@ -5,12 +5,7 @@ export const getGroup = /* GraphQL */ `
   query GetGroup($id: ID!) {
     getGroup(id: $id) {
       id
-      image {
-        bucket
-        region
-        key
-        localUri
-      }
+      name
       Tasks {
         nextToken
       }
@@ -24,6 +19,12 @@ export const getGroup = /* GraphQL */ `
       }
       users {
         nextToken
+      }
+      image {
+        bucket
+        region
+        key
+        localUri
       }
       createdAt
       updatedAt
@@ -40,6 +41,7 @@ export const listGroups = /* GraphQL */ `
     listGroups(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        name
         createdAt
         updatedAt
         groupTimeFrameId
@@ -340,6 +342,7 @@ export const getUserGroup = /* GraphQL */ `
       userId
       group {
         id
+        name
         createdAt
         updatedAt
         groupTimeFrameId
