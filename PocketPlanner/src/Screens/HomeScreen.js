@@ -268,52 +268,19 @@ const TaskList = () => {
           <AddInput/>
         </View>
       </View>
-      <ScrollView contentContainerStyle={styles.taskListContainer}>
+      <ListContainer>
+        <ScrollView contentContainerStyle={styles.taskListContainer}>
 
-      {[...tasks, ...meetings]
-  .filter(item => (!item.deadline || new Date(item.deadline) <= cutoffDate) && (!item.meetingDate || new Date(item.meetingDate) <= cutoffDate))
-  .sort((a, b) => {
-    const aTime = new Date(a.deadline || a.meetingDate);
-    const bTime = new Date(b.deadline || b.meetingDate);
-    return aTime - bTime;
-  })
-  .map((item) => (
-    <TouchableOpacity 
-      key={item.id} 
-      onPress={() => {
-        if (item.meetingDate) {
-          handleConfirmMeeting(item);
-        } else {
-          handleConfirmTask(item);
-        }
-      }}
-      style={[
-        styles.taskItem,
-        item.completed ? styles.taskItemCompleted : styles.taskItem,
-      ]}
-    >
-      <View style={{ flex: 1 }}>
-        <Text style={styles.taskName}>{item.name}</Text>
-        {item.description && (
-          <Text style={styles.taskDescription}>{item.description}</Text>
-        )}
-      </View>
-      {item.deadline && (
-        <View style={styles.taskDeadline}>
-          <Text style={styles.taskDate}>{formatDate(item.deadline)}</Text>
-          <Text style={styles.taskTime}>{formatTime(item.deadline)}</Text>
-        </View>
-      )}
-      {item.meetingDate && (
-        <View style={styles.taskDeadline}>
-          <Text style={styles.taskDate}>{formatDate(item.meetingDate)}</Text>
-          <Text style={styles.taskTime}>{formatTime(item.meetingDate)}</Text>
-        </View>
-      )}
-      <CheckBox
-        value={item.completed}
-        checked={item.completed}
-        style={styles.checkbox}
+        {[...tasks, ...meetings]
+    .filter(item => (!item.deadline || new Date(item.deadline) <= cutoffDate) && (!item.meetingDate || new Date(item.meetingDate) <= cutoffDate))
+    .sort((a, b) => {
+      const aTime = new Date(a.deadline || a.meetingDate);
+      const bTime = new Date(b.deadline || b.meetingDate);
+      return aTime - bTime;
+    })
+    .map((item) => (
+      <TouchableOpacity 
+        key={item.id} 
         onPress={() => {
           if (item.meetingDate) {
             handleConfirmMeeting(item);
@@ -321,22 +288,57 @@ const TaskList = () => {
             handleConfirmTask(item);
           }
         }}
-      />
-      <TouchableOpacity onPress={() => {
-          if (item.meetingDate) {
-            handleDeleteMeeting(item);
-          } else {
-            handleDeleteTask(item);
-          }
-        }}>
-        <Icon name="times" color="red" size={20} />
+        style={[
+          styles.taskItem,
+          item.completed ? styles.taskItemCompleted : styles.taskItem,
+        ]}
+      >
+        <View style={{ flex: 1 }}>
+          <Text style={styles.taskName}>{item.name}</Text>
+          {item.description && (
+            <Text style={styles.taskDescription}>{item.description}</Text>
+          )}
+        </View>
+        {item.deadline && (
+          <View style={styles.taskDeadline}>
+            <Text style={styles.taskDate}>{formatDate(item.deadline)}</Text>
+            <Text style={styles.taskTime}>{formatTime(item.deadline)}</Text>
+          </View>
+        )}
+        {item.meetingDate && (
+          <View style={styles.taskDeadline}>
+            <Text style={styles.taskDate}>{formatDate(item.meetingDate)}</Text>
+            <Text style={styles.taskTime}>{formatTime(item.meetingDate)}</Text>
+          </View>
+        )}
+        <CheckBox
+          value={item.completed}
+          checked={item.completed}
+          style={styles.checkbox}
+          onPress={() => {
+            if (item.meetingDate) {
+              handleConfirmMeeting(item);
+            } else {
+              handleConfirmTask(item);
+            }
+          }}
+        />
+        <TouchableOpacity onPress={() => {
+            if (item.meetingDate) {
+              handleDeleteMeeting(item);
+            } else {
+              handleDeleteTask(item);
+            }
+          }}>
+          <Icon name="times" color="red" size={20} />
+        </TouchableOpacity>
+
       </TouchableOpacity>
+    ))
+  }
 
-    </TouchableOpacity>
-  ))
-}
-
-      </ScrollView>
+        </ScrollView>
+      </ListContainer>
     </View>
   );  
 };
@@ -419,7 +421,9 @@ const ComponentContainer = styled.View`
   margin-left: 20px;
   height: 825px;
 `;
-
+const ListContainer = styled.View`
+  height: 700px;
+`;
 const EmptyImage = styled.Image`
   width: 350px;
   height: 350px;

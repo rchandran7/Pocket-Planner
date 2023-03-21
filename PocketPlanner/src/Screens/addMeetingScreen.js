@@ -114,7 +114,7 @@ const AddMeetingForm = () => {
       console.log(currentDate);
       while (currentDate <= endDate) {
         const dayOfWeek = currentDate.getUTCDay();
-        if ((dayOfWeek === 0 && includeSundays) || (dayOfWeek === 1 && includeMondays) || (dayOfWeek === 2 && includeTuesdays) || (dayOfWeek === 3 && includeWednesdays) || (dayOfWeek === 4 && includeThursdays) || (dayOfWeek === 5 && includeFridays) || (dayOfWeek === 6 && includeSaturdays)) {
+        if ((dayOfWeek === 1 && includeSundays) || (dayOfWeek === 2 && includeMondays) || (dayOfWeek === 3 && includeTuesdays) || (dayOfWeek === 4 && includeWednesdays) || (dayOfWeek === 5 && includeThursdays) || (dayOfWeek === 6 && includeFridays) || (dayOfWeek === 0 && includeSaturdays)) {
           dates.push(new Date(currentDate.getTime())); 
         }
         currentDate.setDate(currentDate.getDate() + 1);
@@ -256,13 +256,13 @@ const AddMeetingForm = () => {
     ) : (
       <View>
 
-        <TouchableOpacity onPress={() => setIsDatePickerVisible(true)} style={styles.button}>
+        <TouchableOpacity onPress={() => setIsDatePickerVisible(true)} style={styles.meetingButton}>
           <Text style={styles.buttonText}>Set Meeting Date and Time</Text>
           <Text style={styles.deadlineText}>{formatDate(meetingTime)}, {formatTime(meetingTime)}</Text>
         </TouchableOpacity>
 
 
-        <TouchableOpacity onPress={handleSingleMeeting} style={styles.button}>
+        <TouchableOpacity onPress={handleSingleMeeting} style={styles.meetingButton}>
           <Text style={styles.buttonText}>Create Meeting</Text>
         </TouchableOpacity>
 
@@ -293,6 +293,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 20,
   },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
@@ -301,8 +306,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: '100%',
   },
+  deadlineText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
   buttonContainer: {
     width: '100%',
+    marginBottom: 10,
+  },
+  meetingButton: {
+    backgroundColor: '#B0C4DE',
+    borderRadius: 10,
+    padding: 10,
+    paddingHorizontal: 140,
+    alignItems: 'center',
     marginBottom: 10,
   },
   button: {
