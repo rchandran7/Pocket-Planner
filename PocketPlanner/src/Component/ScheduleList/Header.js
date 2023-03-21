@@ -5,7 +5,7 @@ import styled from "styled-components";
  // example date options
 
 export default function Header({ onOptionChange }) {
-  const options = ["All", "Today", "Next 7 Days", "Next 30 Days", "Calendar View"];
+  const options = ["All", "Today", "Next 7 Days", "Next 30 Days"];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(options[0]);
   const handleOpenModal = () => {
