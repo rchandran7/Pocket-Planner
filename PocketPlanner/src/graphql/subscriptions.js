@@ -5,12 +5,7 @@ export const onCreateGroup = /* GraphQL */ `
   subscription OnCreateGroup($filter: ModelSubscriptionGroupFilterInput) {
     onCreateGroup(filter: $filter) {
       id
-      image {
-        bucket
-        region
-        key
-        localUri
-      }
+      name
       Tasks {
         nextToken
       }
@@ -24,6 +19,12 @@ export const onCreateGroup = /* GraphQL */ `
       }
       users {
         nextToken
+      }
+      image {
+        bucket
+        region
+        key
+        localUri
       }
       createdAt
       updatedAt
@@ -35,12 +36,7 @@ export const onUpdateGroup = /* GraphQL */ `
   subscription OnUpdateGroup($filter: ModelSubscriptionGroupFilterInput) {
     onUpdateGroup(filter: $filter) {
       id
-      image {
-        bucket
-        region
-        key
-        localUri
-      }
+      name
       Tasks {
         nextToken
       }
@@ -54,6 +50,12 @@ export const onUpdateGroup = /* GraphQL */ `
       }
       users {
         nextToken
+      }
+      image {
+        bucket
+        region
+        key
+        localUri
       }
       createdAt
       updatedAt
@@ -65,12 +67,7 @@ export const onDeleteGroup = /* GraphQL */ `
   subscription OnDeleteGroup($filter: ModelSubscriptionGroupFilterInput) {
     onDeleteGroup(filter: $filter) {
       id
-      image {
-        bucket
-        region
-        key
-        localUri
-      }
+      name
       Tasks {
         nextToken
       }
@@ -84,6 +81,12 @@ export const onDeleteGroup = /* GraphQL */ `
       }
       users {
         nextToken
+      }
+      image {
+        bucket
+        region
+        key
+        localUri
       }
       createdAt
       updatedAt
@@ -420,6 +423,7 @@ export const onCreateUserGroup = /* GraphQL */ `
       userId
       group {
         id
+        name
         createdAt
         updatedAt
         groupTimeFrameId
@@ -449,6 +453,7 @@ export const onUpdateUserGroup = /* GraphQL */ `
       userId
       group {
         id
+        name
         createdAt
         updatedAt
         groupTimeFrameId
@@ -478,6 +483,7 @@ export const onDeleteUserGroup = /* GraphQL */ `
       userId
       group {
         id
+        name
         createdAt
         updatedAt
         groupTimeFrameId
