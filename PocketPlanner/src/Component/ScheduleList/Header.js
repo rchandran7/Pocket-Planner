@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { TouchableWithoutFeedback, TouchableOpacity, Text, StyleSheet, Modal, View, FlatList } from "react-native";
 import styled from "styled-components";
-
  // example date options
 
 export default function Header({ onOptionChange }) {
-  const options = ["All", "Today", "Next 7 Days", "Next 30 Days"];
+  const options = ["All", "Today", "Next 7 Days", "Next 30 Days", "Calendar View"];
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(options[0]);
   const handleOpenModal = () => {
@@ -80,9 +79,14 @@ const HeaderText = styled.Text`
 const styles = StyleSheet.create({
   dateStyle: {
     color: '#b22222',
-    fontSize: 20,
+    fontSize: 18,
     marginTop: 10,
     marginRight: 7,
+    borderColor: '#C8C8C8',
+    borderWidth: 1,
+    padding: 2,
+    paddingHorizontal: 8,
+    borderRadius: 10,
   },
 
   modalView: {
@@ -116,6 +120,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: '15%',
     width: '100%',
+  },
+  sortButton: {
+    borderColor: '#B0C4DE',
+    borderRadius: 10,
+    borderWidth: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonText: {
     color: '#fff',

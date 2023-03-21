@@ -9,7 +9,6 @@ import { tasksByUserID, listUsers, listTasks } from '../graphql/queries';
 import { deleteTask, updateTask } from '../graphql/mutations';
 
 import styled from 'styled-components';
-import TaskList from './HomeScreen';
 
 var datesObj = {
   date: '',
@@ -104,6 +103,9 @@ export default function CalendarView() {
   markingType="multi-period"
   style={styles.containerItem}
   markedDates = {markedDay}
+  theme={{
+    calendarBackground: 'transparent',
+  }}
 /*   markedDates={{
     '2023-03-14': {
       periods: [
@@ -141,11 +143,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: '0%',
-    backgroundColor: '#fff',
     justifyContent: 'center',
   },
   containerItem: {
     minHeight: '0%',
     minWidth: '100%',
+    backgroundColor: 'transparent'
   },
 });
