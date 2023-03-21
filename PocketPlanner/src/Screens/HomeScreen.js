@@ -36,8 +36,6 @@ const TaskList = () => {
       case "Next 30 Days":
         daysToAdd = 30;
         break;
-      case "Calendar View":
-        setSelectedOption("Calendar View");
         return;
       default:
         break;
