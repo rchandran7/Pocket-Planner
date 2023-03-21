@@ -76,7 +76,7 @@ export default function CalendarView() {
   }, {}); 
 
   const refreshTasks = async () => {
-    try {
+/*     try {
       const taskData = await API.graphql(graphqlOperation(tasksByUserID, { userID: user.id }));
       const tasks = taskData.data.tasksByUserID.items;
       setTasks(tasks);
@@ -84,10 +84,20 @@ export default function CalendarView() {
     } catch (err) {
       console.log('Error fetching tasks:', err);
     }
+    const dates = tasks.reduce((dates, task) => {
+      //console.log(task.deadline.substring(0,10));
+      markedDay[task.deadline.substring(0,10)] = {
+        periods: [
+          //{startingDay: true, endingDay: false, color: '#5f9ea0'},
+          {startingDay: true, endingDay: true, color: '#ffa500'},
+          //{startingDay: true, endingDay: false, color: '#f0e68c'}
+        ]
+      };
+    }, {}); */ 
   };
 
   return (
-
+    //console.log(markedDay),
     <View style={styles.container}>
 
     <Calendar
@@ -118,9 +128,9 @@ export default function CalendarView() {
     }
   }} */
 />
-<TouchableOpacity onPress={() => refreshTasks} style={{ marginLeft: 10 }}>
+{/* <TouchableOpacity onPress={() => refreshTasks} style={{ marginLeft: 10 }}>
       <Icon name="times" color="red" size={50} />
-</TouchableOpacity>
+</TouchableOpacity> */}
 
       <StatusBar style="auto" />
     </View>
