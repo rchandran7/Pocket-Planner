@@ -6,7 +6,7 @@ import { listGroups, listUserGroups } from '../../../src/graphql/queries';
 import { useNavigation } from '@react-navigation/native';
 
 export default function JoinGroupScreen() {
-  const [groupKey, setGroupKey] = useState('');
+  const [groupName, setGroupName] = useState('');
   const [groupId, setGroupId] = useState(null); // initialize group id to null
   const [user, setUser] = useState(null);
   const [groups, setGroups] = useState(null);
@@ -28,7 +28,7 @@ export default function JoinGroupScreen() {
   }, []);
   const searchGroups = async () => {
     try {
-      const response = await API.graphql(graphqlOperation(listGroups, { filter: { name: { eq: name } } }));
+      const response = await API.graphql(graphqlOperation(listGroups, { filter: { name: { eq: groupName } } }));
       setGroups(response.data.listGroups.items);
     } catch (error) {
       console.log(error);
@@ -95,7 +95,7 @@ export default function JoinGroupScreen() {
             <TextInput
             style={styles.input}
             placeholder="Search Group Name"
-            onChangeText={(value) => setGroupKey(value)}
+            onChangeText={(value) => setGroupName(value)}
             />
             <TouchableOpacity style={styles.searchButton} onPress={searchGroups}>
                 <Text style={styles.buttonText}>Search</Text>
