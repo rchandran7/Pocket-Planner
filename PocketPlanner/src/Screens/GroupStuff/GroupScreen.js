@@ -52,7 +52,7 @@ export default function GroupScreen() {
       }
     };
     const handleGroupDisplay = (id) => {
-      console.log(id);
+      navigation.navigate('GroupSchedule', {id: id});
     }
 
     const renderGroup = ({ item }) => {
