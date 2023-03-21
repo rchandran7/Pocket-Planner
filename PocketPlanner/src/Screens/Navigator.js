@@ -55,16 +55,6 @@ function ScreenNavigator() {
           }}
         /> 
         <Tab.Screen 
-          name="CalendarScreen" 
-          component={CalendarView} 
-          options={{
-            tabBarLabel: 'Calendar',
-            tabBarIcon: ({color}) => (
-              <MaterialIcons name = "calendar-today" color={color} size={22} />
-            )
-          }}
-        /> 
-        <Tab.Screen 
           name="Classes" 
           component={GroupScreen} 
           options={{

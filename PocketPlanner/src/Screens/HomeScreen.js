@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import styled from 'styled-components';
 import Header from '../Component/ScheduleList/Header';
 import AddInput from '../Component/ScheduleList/AddInput';
-import CalendarView from '../Component/ScheduleList/Calendar';
+import CalendarView from './Calendar';
 import {CheckBox} from "react-native-elements";
 
 const TaskList = () => {
@@ -37,6 +37,9 @@ const TaskList = () => {
       case "Next 30 Days":
         daysToAdd = 30;
         break;
+      case "Calendar View":
+        setSelectedOption("Calendar View");
+        return;
       default:
         break;
     }
@@ -254,7 +257,9 @@ const TaskList = () => {
             <AddInput/>
           </View>
         </View>
-        <CalendarView tasks={tasks} />
+        <CalendarContainer>
+         <CalendarView tasks={tasks} />
+        </CalendarContainer>
       </View>
     );
   }
@@ -424,6 +429,9 @@ const ComponentContainer = styled.View`
 `;
 const ListContainer = styled.View`
   height: 700px;
+`;
+const CalendarContainer = styled.View`
+  height: 375px;
 `;
 const EmptyImage = styled.Image`
   width: 350px;
