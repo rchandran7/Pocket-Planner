@@ -11,7 +11,9 @@ import AddAssignment from '../Screens/addAssignmentScreen';
 import AddMeeting from '../Screens/addMeetingScreen';
 import CreateGroup from '../Screens/GroupStuff/CreateGroupScreen';
 import JoinGroup from '../Screens/GroupStuff/JoinGroupScreen';
-
+import GroupSchedule from '../Screens/GroupStuff/GroupSchedule';
+import AddGroupTask from '../Screens/GroupStuff/AddGroupTask';
+import AddGroupMeeting from '../Screens/GroupStuff/AddGroupMeeting';
 const stackNav = createStackNavigator();
 
 function tabNavigator() {
@@ -32,6 +34,9 @@ function tabNavigator() {
 
                 <stackNav.Screen name="CreateGroupScreen" component={CreateGroup} />
                 <stackNav.Screen name="JoinGroupScreen" component={JoinGroup} />
+                <stackNav.Screen name="GroupSchedule" component={GroupSchedule} />
+                <stackNav.Screen name="AddGroupTask" component={AddGroupTask} />
+                <stackNav.Screen name="AddGroupMeeting" component={AddGroupMeeting} />
                 
             </stackNav.Navigator>
         </NavigationContainer>
