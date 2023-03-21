@@ -21,18 +21,9 @@ export default function AddInput({submitHandler}) {
         <TouchableWithoutFeedback onPress={()=>{setModalVisible(!modalVisible)}}>
           <View style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.5)', alignItems: 'center' }}>
             <View style = {styles.modalView}>
-              <ClassButton onPress={()=> {navigation.navigate("createClass"); setModalVisible(!modalVisible)}}>
-                <TextClass>Create Class</TextClass>
-              </ClassButton>
-              
-              <AddClassButton onPress={()=>{navigation.navigate("addClass"); setModalVisible(!modalVisible)}}>
-                <TextAddClass>Add Class</TextAddClass>
-              </AddClassButton>
-
               <AssignmentButton onPress={()=>{navigation.navigate("addAssignment"); setModalVisible(!modalVisible)}}>
                 <TextAssignment>Add Assignment</TextAssignment>
               </AssignmentButton>
-
               <MeetingButton onPress={()=>{navigation.navigate("addMeeting"); setModalVisible(!modalVisible)}}>
                 <TextMeeting>Add Meeting</TextMeeting>
               </MeetingButton>
@@ -56,12 +47,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalView: {
-    marginTop: 180,
+    marginTop: 250,
     margin: 55,
     backgroundColor: '#f0f8ff',
     borderRadius: 20,
     padding: 40,
-    paddingVertical: 40,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -84,15 +74,6 @@ const ButtonContainer = styled.View`
   align-items: center;
   justify-content: center;
 `;
-const ClassButton = styled.TouchableOpacity`
-  align-items: center;
-  justify-content: center;
-`;
-const TextClass = styled.Text`
-  text-align: center;
-  font-size: 25px;
-  color: #b22222;
-`;
 const TextAssignment = styled.Text`
   text-align: center;
   font-size: 25px;
@@ -101,21 +82,12 @@ const TextAssignment = styled.Text`
 const AssignmentButton = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
-  padding-top: 50px;
-`;
-const AddClassButton = styled.TouchableOpacity`
-  align-items: center;
-  justify-content: center;
-`;
-const TextAddClass = styled.Text`
-  text-align: center;
-  font-size: 25px;
-  padding-top: 50px;
-  color: #b22222;
+  padding-top: 5px;
 `;
 const MeetingButton = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
+  padding-bottom: 5px;
 `;
 const TextMeeting = styled.Text`
   text-align: center;
